@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SafeHill - Landslide Alert System</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <nav>
+    <h1>SafeHill</h1>
+    <ul>
+      <li><a href="#home">Home</a></li>
+      <li><a href="#weather">Weather</a></li>
+      <li><a href="#risk">Risk</a></li>
+      <li><a href="#report">Report</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+</header>
+
+<section id="home">
+  <h2>SafeHill</h2>
+  <p>Smart Landslide Awareness & Disaster Management Portal</p>
+  <!-- <button id="checkWeather">Check Weather</button> -->
+</section>
+<!-- ================= DASHBOARD ================= -->
+
+<section id="dashboard">
+
+<h2 class="dashboard-title">📊 Live Dashboard</h2>
+
+<div class="dashboard-container">
+
+<div class="dashboard-card">
+<div class="icon">🌡️</div>
+<h3>Temperature</h3>
+<p id="dashboardTemp">24°C</p>
+</div>
+
+<div class="dashboard-card">
+<div class="icon">🌧️</div>
+<h3>Rainfall</h3>
+<p id="dashboardRain">12 mm</p>
+</div>
+
+<div class="dashboard-card">
+<div class="icon">💨</div>
+<h3>Wind Speed</h3>
+<p id="dashboardWind">18 km/h</p>
+</div>
+
+<div class="dashboard-card">
+<div class="icon">⚠️</div>
+<h3>Risk Level</h3>
+<p id="dashboardRisk">HIGH</p>
+</div>
+
+<div class="dashboard-card">
+<div class="icon">📍</div>
+<h3>Location</h3>
+<p>Kwarab, Almora</p>
+</div>
+
+<div class="dashboard-card">
+<div class="icon">🕒</div>
+<h3>Last Updated</h3>
+<p id="lastUpdated">Loading...</p>
+</div>
+
+</div>
+
+</section>
+
+<section id="weather">
+
+<h2>🌦 Live Weather</h2>
+
+<div id="weatherCard">
+
+<h3>Status</h3>
+
+<p id="weatherStatus">Loading...</p>
+
+<h3>Temperature</h3>
+
+<p id="temperature">--</p>
+
+<h3>Rainfall</h3>
+
+<p id="rainfall">--</p>
+
+<h3>Wind Speed</h3>
+
+<p id="wind">--</p>
+
+<div id="alert-box">
+
+<p id="alert-message"></p>
+
+</div>
+
+</div>
+
+</section>
+
+<section id="risk">
+
+<h2>⚠️ Landslide Risk Level</h2>
+
+<div class="risk">
+
+<div class="low">
+<h3>🟢 LOW</h3>
+<p>Safe Weather</p>
+</div>
+
+<div class="medium">
+<h3>🟡 MEDIUM</h3>
+<p>Moderate Rain</p>
+</div>
+
+<div class="high">
+<h3>🔴 HIGH</h3>
+<p>Heavy Rain</p>
+</div>
+
+</div>
+
+<h3 id="risk-level">Current Risk : 🟢 LOW</h3>
+
+<div class="risk-details">
+
+<p>
+
+<b>Location :</b> Kwarab Pool, Almora
+
+</p>
+
+<p>
+
+<b>Danger :</b>
+
+Landslide, Falling Rocks,
+
+Road Blockage
+
+</p>
+
+</div>
+
+</section>
+<!-- ================= REPORT DISASTER ================= -->
+
+<section id="report">
+
+<div class="report-container">
+
+<div class="report-left">
+
+<h2>🚨 Report a Disaster</h2>
+
+<p class="report-subtitle">
+
+Help us improve disaster response by reporting landslides,
+road blockages, heavy rainfall, falling rocks, floods,
+or any emergency situation in your area.
+
+</p>
+
+<div class="report-features">
+
+<div class="feature">
+<span>📍</span>
+<p>Share the exact location of the incident.</p>
+</div>
+
+<div class="feature">
+<span>📷</span>
+<p>Upload photos of the affected area.</p>
+</div>
+
+<div class="feature">
+<span>⚠️</span>
+<p>Help authorities identify dangerous locations.</p>
+</div>
+
+<div class="feature">
+<span>🚑</span>
+<p>Improve emergency response and public safety.</p>
+</div>
+
+</div>
+
+</div>
+
+<div class="report-right">
+
+<div class="report-card">
+
+<h3>📝 Submit Disaster Report</h3>
+
+<p>
+Click the button below to open the SafeHill Disaster Report Form.
+Your report will be securely stored in our Google Sheet database.
+</p>
+
+<a href="https://docs.google.com/forms/d/e/1FAIpQLScRHsA0mC0D-1XoElspwWfeLihEQxI7Jh2RgWaXHahB1q80xg/viewform?usp=publish-editor"
+target="_blank">
+
+<button class="report-btn">
+
+🚨 Report Now
+
+</button>
+
+</a>
+
+<p class="small-text">
+
+Average reporting time: <b>Less than 2 Minutes</b>
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+<section id="safety">
+
+<h2 class="safety-title">🛡️ Safety Tips During Landslides</h2>
+
+<p class="safety-subtitle">
+Follow these important safety guidelines to protect yourself and your family during heavy rainfall and landslides.
+</p>
+
+<div class="safety-container">
+
+<div class="tip-card">
+
+<div class="icon">🌧️</div>
+
+<h3>Before Heavy Rain</h3>
+
+<p>
+Check weather updates regularly and avoid travelling in landslide-prone areas during continuous rainfall.
+</p>
+
+</div>
+
+<div class="tip-card">
+
+<div class="icon">🚧</div>
+
+<h3>During Landslide</h3>
+
+<p>
+Move away from hill slopes immediately. Never stop your vehicle near loose rocks or unstable ground.
+</p>
+
+</div>
+
+<div class="tip-card">
+
+<div class="icon">📞</div>
+
+<h3>Emergency Help</h3>
+
+<p>
+Call Police (112), Ambulance (108), Fire (101), or SDRF immediately if someone is trapped or injured.
+</p>
+
+</div>
+
+<div class="tip-card">
+
+<div class="icon">🎒</div>
+
+<h3>Emergency Kit</h3>
+
+<p>
+Keep water, medicines, flashlight, power bank, important documents, and first-aid supplies ready.
+</p>
+
+</div>
+
+<div class="tip-card">
+
+<div class="icon">🚗</div>
+
+<h3>Road Safety</h3>
+
+<p>
+Avoid driving through blocked roads or areas with falling rocks. Wait for official clearance.
+</p>
+
+</div>
+
+<div class="tip-card">
+
+<div class="icon">📢</div>
+
+<h3>Follow Official Alerts</h3>
+
+<p>
+Always follow updates issued by IMD, SDRF, and the District Administration during emergencies.
+</p>
+
+</div>
+
+</div>
+
+</section>
+
+<section id="contact">
+
+<h2 class="contact-title">📞 Emergency Contact</h2>
+
+<p class="contact-subtitle">
+In case of any emergency, immediately contact the following services.
+</p>
+
+<div class="contact-container">
+
+<div class="contact-card police">
+<h3>👮 Police</h3>
+<p>Emergency Police Assistance</p>
+<h2>112</h2>
+<a href="tel:112">Call Now</a>
+</div>
+
+<div class="contact-card ambulance">
+<h3>🚑 Ambulance</h3>
+<p>Medical Emergency</p>
+<h2>108</h2>
+<a href="tel:108">Call Now</a>
+</div>
+
+<div class="contact-card fire">
+<h3>🔥 Fire Service</h3>
+<p>Fire Emergency</p>
+<h2>101</h2>
+<a href="tel:101">Call Now</a>
+</div>
+
+<div class="contact-card sdrf">
+<h3>⛑️ SDRF</h3>
+<p>Disaster Response Force</p>
+<h2>1070</h2>
+<a href="tel:1070">Call Now</a>
+</div>
+
+</div>
+
+</section>
+<!-- ===================== KWARAB DANGER ZONE ===================== -->
+
+<section id="danger-zone">
+
+<div class="container">
+
+<div class="danger-header">
+
+<h2>⚠️ Kwarab Landslide Danger Zone</h2>
+
+<span class="danger-badge">HIGH RISK AREA</span>
+
+<p>
+Kwarab Pool is one of the most landslide-prone locations in Almora District,
+Uttarakhand. Heavy rainfall often causes landslides, falling rocks, and road
+closures in this region.
+</p>
+
+</div>
+
+<div class="danger-card">
+
+<div class="danger-image">
+
+<img src="quarab2.jpeg" alt="Kwarab Pool">
+
+</div>
+
+<div class="danger-info">
+
+<h3>📍 Location Information</h3>
+
+<p><b>Place :</b> Kwarab Pool, Almora, Uttarakhand</p>
+
+<p><b>Coordinates :</b> 29.60° N, 79.53° E</p>
+
+<p><b>Altitude :</b> Himalayan Region</p>
+
+<div class="risk-box">
+
+<h3>🔴 Current Risk Level</h3>
+
+<div class="risk-meter">
+
+<div class="risk-fill"></div>
+
+</div>
+
+<p class="risk-text">
+
+HIGH RISK DURING HEAVY RAINFALL
+
+</p>
+
+</div>
+
+<h3>⚠️ Why is this Area Dangerous?</h3>
+
+<ul>
+
+<li>🪨 Frequent landslides during monsoon.</li>
+
+<li>🌧️ Heavy rainfall weakens mountain slopes.</li>
+
+<li>🚧 Roads may become blocked by rocks and mud.</li>
+
+<li>🚗 Travel can become dangerous during storms.</li>
+
+<li>⛰️ Loose rocks may fall from hillsides.</li>
+
+</ul>
+
+<div class="danger-buttons">
+
+<a href="#contact" class="danger-btn">
+
+📞 Emergency Help
+
+</a>
+
+<a href="#report" class="report-btn">
+
+📝 Report Incident
+
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ===================== MAP ===================== -->
+
+<section id="map-section">
+
+<div class="container">
+
+<h2>🗺️ Landslide Risk Map</h2>
+
+<p>
+The map below represents the approximate location
+of Kwarab Landslide Zone.
+</p>
+
+<div id="map" style="height:500px;"></div>
+
+<iframe
+
+src="https://www.google.com/maps?q=Kwarab%20Almora&output=embed"
+
+width="100%"
+
+height="500"
+
+style="border:0;border-radius:12px;"
+
+loading="lazy">
+
+</iframe>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ===================== GALLERY ===================== -->
+
+<section id="gallery">
+
+<h2 class="gallery-title">📸 Kwarab Landslide Gallery</h2>
+
+<p class="gallery-subtitle">
+Real photographs of the Kwarab landslide-prone area in Almora, Uttarakhand.
+These images show road damage, falling rocks, and traffic disruption during heavy rainfall.
+</p>
+
+<div class="gallery">
+
+<div class="card">
+<img src="quarab2.jpeg" alt="Kwarab Road Damage">
+
+<div class="card-content">
+<h3>🚧 Road Damage</h3>
+
+<p>
+Heavy rainfall causes severe road damage near Kwarab Pool, making travel dangerous.
+</p>
+</div>
+
+</div>
+
+<div class="card">
+
+<img src="newqurab.jpeg" alt="Heavy Rain">
+
+<div class="card-content">
+
+<h3>🌧️ Heavy Rain Impact</h3>
+
+<p>
+Continuous rainfall increases the possibility of landslides and road blockages.
+</p>
+
+</div>
+
+</div>
+
+<div class="card">
+
+<img src="qurab4.jpeg" alt="Landslide">
+
+<div class="card-content">
+
+<h3>🪨 Landslide Area</h3>
+
+<p>
+Large rocks and loose soil frequently fall onto the highway during the monsoon season.
+</p>
+
+</div>
+
+</div>
+
+</div>
+<div class="card">
+
+<img src="safe1.jpeg" alt="Kwarab Landslide">
+
+<div class="card-content">
+
+<h3>🚧 Kwarab Pool Landslide Area</h3>
+
+<p>
+This photograph shows the landslide-prone area near Kwarab Pool in Almora, Uttarakhand.
+Heavy rainfall often causes road damage, falling rocks, and traffic disruptions in this region.
+Travellers are advised to remain alert during the monsoon season.
+</p>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ===================== DISCLAIMER ===================== -->
+
+<section id="disclaimer">
+
+<div class="container">
+
+<h2>Important Notice</h2>
+
+<p>
+
+This website is created only for educational
+and awareness purposes.
+
+Always follow official alerts issued by
+IMD, SDRF,
+District Administration,
+and local authorities.
+
+</p>
+
+</div>
+
+</section>
+
+<footer>
+<p>© 2026 SafeHill | Educational Disaster Management Project</p>
+</footer>
+<link rel="stylesheet"
+href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="safe.js"></script>
+</body>
+</html>
