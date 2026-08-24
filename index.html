@@ -59,10 +59,72 @@
 <p id="dashboardRisk">HIGH</p>
 </div>
 
-<div class="dashboard-card">
-<div class="icon">📍</div>
-<h3>Location</h3>
-<p>Kwarab, Almora</p>
+<!-- ================= LOCATION DETECTION ================= -->
+
+<div class="dashboard-card location-card">
+
+    <div class="icon">📍</div>
+
+    <h3>Your Current Location</h3>
+
+    <p id="locationStatus">
+        Click the button to detect your location.
+    </p>
+
+    <!-- Detect Location Button -->
+
+    <button
+        type="button"
+        id="detectLocationBtn"
+        onclick="detectUserLocation()">
+
+        📍 Detect My Location
+
+    </button>
+
+
+    <!-- Detected Location -->
+
+    <div
+        id="locationResult"
+        class="location-result"
+        style="display:none;">
+
+        <h4>
+            📌 Location Detected
+        </h4>
+
+        <p>
+            <strong>Latitude:</strong>
+            <span id="userLatitude">--</span>
+        </p>
+
+        <p>
+            <strong>Longitude:</strong>
+            <span id="userLongitude">--</span>
+        </p>
+
+        <p>
+            <strong>Nearest Area:</strong>
+            <span id="nearestLocation">Finding...</span>
+        </p>
+
+        <p>
+            <strong>Distance:</strong>
+            <span id="locationDistance">--</span>
+        </p>
+
+    </div>
+
+
+    <!-- Location Error -->
+
+    <p
+        id="locationError"
+        style="display:none;">
+
+    </p>
+
 </div>
 
 <div class="dashboard-card">
@@ -104,6 +166,80 @@
 </div>
 
 </div>
+
+</section>
+<!-- ================= TOURIST SAFETY ALERT ================= -->
+
+<section id="tourist-safety">
+
+    <h2>📍 Tourist Safety Alert</h2>
+
+    <p class="tourist-subtitle">
+        SafeHill checks your location and warns you before
+        entering a monitored disaster-prone area.
+    </p>
+
+    <div class="tourist-safety-container">
+
+        <div class="location-card">
+
+            <div class="icon">📍</div>
+
+            <h3>Your Current Location</h3>
+
+            <p id="locationStatus">
+                Waiting for location permission...
+            </p>
+
+            <p id="currentCoordinates">
+                Latitude: -- <br>
+                Longitude: --
+            </p>
+
+        </div>
+
+
+        <div class="location-card">
+
+            <div class="icon">🗺️</div>
+
+            <h3>Nearby Risk Zone</h3>
+
+            <p id="nearbyZone">
+                Checking nearby areas...
+            </p>
+
+            <p id="zoneDistance">
+                Distance: --
+            </p>
+
+        </div>
+
+
+        <div
+            id="touristAlert"
+            class="tourist-alert">
+
+            <h3>
+                🔔 Safety Status
+            </h3>
+
+            <p id="touristAlertMessage">
+                Your location is being checked.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- Safety Guidance -->
+
+    <div
+        id="safetyGuidance"
+        class="safety-guidance">
+
+    </div>
 
 </section>
 
@@ -454,39 +590,32 @@ HIGH RISK DURING HEAVY RAINFALL
 </div>
 
 </section>
-
 <!-- ===================== MAP ===================== -->
 
 <section id="map-section">
 
-<div class="container">
+    <div class="container">
 
-<h2>🗺️ Landslide Risk Map</h2>
+        <h2>🗺️ Uttarakhand Disaster Risk Map</h2>
 
-<p>
-The map below represents the approximate location
-of Kwarab Landslide Zone.
-</p>
+        <p>
+            The map shows monitored disaster-prone locations
+            and your current location.
+        </p>
 
-<div id="map" style="height:500px;"></div>
+        <div class="map-legend">
 
-<iframe
+            <span>🔴 High Risk</span>
 
-src="https://www.google.com/maps?q=Kwarab%20Almora&output=embed"
+            <span>🟠 Moderate Risk</span>
 
-width="100%"
+            <span>📍 Your Location</span>
 
-height="500"
+        </div>
 
-style="border:0;border-radius:12px;"
+        <div id="map" style="height:500px;"></div>
 
-loading="lazy">
-
-</iframe>
-
-</div>
-
-</div>
+    </div>
 
 </section>
 
@@ -601,6 +730,5 @@ href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="safe.js"></script>
-  <!-- update -->
 </body>
 </html>

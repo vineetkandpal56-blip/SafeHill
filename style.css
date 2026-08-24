@@ -7,11 +7,22 @@ box-sizing:border-box;
 font-family:Arial,Helvetica,sans-serif;
 scroll-behavior:smooth;
 }
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
 
-body{
-background:#eef6f7;
-color:#222;
-line-height:1.6;
+    background:
+    linear-gradient(
+        rgba(5, 20, 35, 0.45),
+        rgba(8, 35, 55, 0.65)
+    ),
+    url("pexels-jplenio-20364510.jpg") center/cover no-repeat;
+
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+
+    color: #ffffff;
 }
 
 header{
@@ -63,7 +74,7 @@ justify-content:center;
 align-items:center;
 text-align:center;
 background:linear-gradient(rgba(0,0,0,.45),rgba(0,0,0,.45)),
-url("images/mountain.jpg") center/cover no-repeat;
+url("pexels-jplenio-20364510.jpg") center/cover no-repeat;
 color:white;
 }
 
@@ -1031,3 +1042,861 @@ font-weight:bold;
 color:#333;
 
 }
+/* =====================================================
+   SAFEHILL — PROFESSIONAL PREMIUM THEME
+   COMPLETE FINAL VERSION
+===================================================== */
+
+:root {
+    --primary: #0f6b78;
+    --primary-light: #2aa6b8;
+    --accent: #d6a84f;
+    --danger: #d9534f;
+
+    --bg-dark: #07141c;
+    --bg-card: rgba(13, 34, 44, 0.90);
+
+    --text: #f4f7f8;
+    --muted: #c5d2d6;
+
+    --border: rgba(255,255,255,0.12);
+}
+
+
+/* =====================================================
+   BODY
+===================================================== */
+
+body {
+    background:
+        linear-gradient(
+            rgba(5, 18, 26, 0.84),
+            rgba(7, 27, 36, 0.90)
+        ),
+        url("pexels-jplenio-20364510.jpg")
+        center center / cover fixed no-repeat;
+
+    color: var(--text);
+}
+
+
+/* =====================================================
+   HEADER
+===================================================== */
+
+header {
+    background: rgba(5, 20, 28, 0.94) !important;
+
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+
+    border-bottom:
+        1px solid rgba(255,255,255,0.10);
+
+    box-shadow:
+        0 4px 20px rgba(0,0,0,0.35);
+}
+
+nav h1 {
+    color: #ffffff !important;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+nav a {
+    color: #e9f0f2 !important;
+}
+
+nav a:hover {
+    color: #7ed8e5 !important;
+}
+
+
+/* =====================================================
+   HOME
+===================================================== */
+
+#home {
+    background:
+        linear-gradient(
+            rgba(4,17,25,0.48),
+            rgba(6,27,36,0.78)
+        ),
+        url("pexels-jplenio-20364510.jpg")
+        center / cover no-repeat !important;
+
+    color: #ffffff !important;
+}
+
+#home h2 {
+    color: #ffffff !important;
+    background: none !important;
+    -webkit-text-fill-color: #ffffff !important;
+
+    font-weight: 700;
+
+    text-shadow:
+        0 3px 20px rgba(0,0,0,0.55);
+}
+
+#home p {
+    color: #dce8eb !important;
+}
+
+
+/* =====================================================
+   ALL MAIN SECTIONS
+===================================================== */
+
+#gallery,
+#contact,
+#safety,
+#danger-zone,
+#report,
+#dashboard {
+    background: transparent !important;
+    color: var(--text) !important;
+}
+
+
+/* =====================================================
+   SECTION CONTAINERS
+===================================================== */
+
+#gallery .container,
+#contact .container,
+#safety .container,
+#danger-zone .container,
+#report .container,
+#dashboard .container {
+    color: var(--text);
+}
+
+
+/* =====================================================
+   WEATHER CARD
+===================================================== */
+
+#weatherCard {
+    background:
+        rgba(13, 34, 44, 0.90) !important;
+
+    color: #ffffff !important;
+
+    border:
+        1px solid var(--border);
+
+    border-radius: 16px;
+
+    box-shadow:
+        0 12px 35px rgba(0,0,0,0.30);
+
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+
+/* =====================================================
+   COMMON PREMIUM CARDS
+===================================================== */
+
+.contact-card,
+.tip-card,
+.dashboard-card,
+.report-card,
+.danger-info,
+.feature,
+.card {
+
+    background:
+        rgba(13, 34, 44, 0.90) !important;
+
+    color: #f4f7f8 !important;
+
+    border:
+        1px solid var(--border) !important;
+
+    border-radius: 16px;
+
+    box-shadow:
+        0 12px 35px rgba(0,0,0,0.30);
+
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+
+    transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease,
+        border-color 0.3s ease;
+}
+
+
+/* =====================================================
+   CARD HOVER
+===================================================== */
+
+.contact-card:hover,
+.tip-card:hover,
+.dashboard-card:hover,
+.card:hover,
+.feature:hover {
+
+    transform: translateY(-5px);
+
+    border-color:
+        rgba(42,166,184,0.40) !important;
+
+    box-shadow:
+        0 18px 40px rgba(0,0,0,0.40);
+}
+
+
+/* =====================================================
+   GALLERY
+===================================================== */
+
+#gallery {
+    color: #ffffff !important;
+}
+
+.gallery-title {
+    color: #ffffff !important;
+
+    background: none !important;
+
+    -webkit-text-fill-color:
+        #ffffff !important;
+
+    font-weight: 700;
+
+    text-shadow:
+        0 2px 15px rgba(0,0,0,0.55);
+}
+
+.gallery-subtitle {
+    color: #d0dde1 !important;
+}
+
+
+/* Gallery cards */
+
+.card {
+    background:
+        rgba(13, 34, 44, 0.94) !important;
+
+    overflow: hidden;
+}
+
+.card-content {
+    background: transparent !important;
+    color: #ffffff !important;
+}
+
+.card-content h3 {
+    color: #e4b85c !important;
+    font-weight: 700;
+}
+
+.card-content p {
+    color: #d5e0e3 !important;
+
+    line-height: 1.8;
+}
+
+
+/* Gallery images */
+
+.card img {
+    display: block;
+
+    transition:
+        transform 0.35s ease;
+}
+
+.card:hover img {
+    transform: scale(1.03);
+}
+
+
+/* =====================================================
+   EMERGENCY CONTACT
+===================================================== */
+
+.contact-title {
+    color: #ffffff !important;
+
+    background: none !important;
+
+    -webkit-text-fill-color:
+        #ffffff !important;
+
+    font-weight: 700;
+
+    text-shadow:
+        0 2px 15px rgba(0,0,0,0.55);
+}
+
+.contact-subtitle {
+    color: #d0dde1 !important;
+}
+
+.contact-card {
+    color: #ffffff !important;
+}
+
+.contact-card h3 {
+    color: #e4b85c !important;
+}
+
+.contact-card h2 {
+    color: #ffffff !important;
+    font-weight: 700;
+}
+
+.contact-card p {
+    color: #d5e0e3 !important;
+}
+
+.contact-card a {
+    background: #126b78 !important;
+    color: #ffffff !important;
+}
+
+.contact-card a:hover {
+    background: #178397 !important;
+}
+
+
+/* Preserve emergency card top colors */
+
+.police {
+    border-top:
+        6px solid #1565C0 !important;
+}
+
+.ambulance {
+    border-top:
+        6px solid #2E7D32 !important;
+}
+
+.fire {
+    border-top:
+        6px solid #D32F2F !important;
+}
+
+.sdrf {
+    border-top:
+        6px solid #FF9800 !important;
+}
+
+
+/* =====================================================
+   SAFETY TIPS
+===================================================== */
+
+.safety-title {
+    color: #ffffff !important;
+
+    background: none !important;
+
+    -webkit-text-fill-color:
+        #ffffff !important;
+
+    font-weight: 700;
+
+    text-shadow:
+        0 2px 15px rgba(0,0,0,0.55);
+}
+
+.safety-subtitle {
+    color: #d0dde1 !important;
+}
+
+.tip-card {
+    background:
+        rgba(13,34,44,0.94) !important;
+
+    color: #ffffff !important;
+}
+
+.tip-card h3 {
+    color: #e4b85c !important;
+}
+
+.tip-card p {
+    color: #d5e0e3 !important;
+}
+
+
+/* =====================================================
+   DANGER ZONE
+===================================================== */
+
+#danger-zone {
+    color: #ffffff !important;
+}
+
+.danger-header h2 {
+    color: #ef6a67 !important;
+
+    background: none !important;
+
+    -webkit-text-fill-color:
+        #ef6a67 !important;
+
+    text-shadow:
+        0 2px 15px rgba(0,0,0,0.55);
+}
+
+.danger-header p {
+    color: #d0dde1 !important;
+}
+
+.danger-info {
+    background:
+        rgba(13,34,44,0.94) !important;
+
+    color: #ffffff !important;
+}
+
+.danger-info h3 {
+    color: #e4b85c !important;
+}
+
+.danger-info p,
+.danger-info li {
+    color: #dbe6e9 !important;
+}
+
+.danger-info ul {
+    color: #dbe6e9 !important;
+}
+
+
+/* Risk meter */
+
+.risk-meter {
+    background:
+        rgba(255,255,255,0.18) !important;
+}
+
+.risk-fill {
+    background:
+        #d9534f !important;
+}
+
+.risk-text {
+    color:
+        #ff7373 !important;
+}
+
+
+/* Danger badge */
+
+.danger-badge {
+    background:
+        #c74747 !important;
+
+    color: #ffffff !important;
+
+    animation: none !important;
+
+    box-shadow:
+        0 5px 15px rgba(0,0,0,0.25);
+}
+
+
+/* =====================================================
+   REPORT SECTION
+===================================================== */
+
+.report-left h2 {
+    color: #ef6a67 !important;
+
+    background: none !important;
+
+    -webkit-text-fill-color:
+        #ef6a67 !important;
+
+    text-shadow:
+        0 2px 15px rgba(0,0,0,0.55);
+}
+
+.report-subtitle {
+    color: #d0dde1 !important;
+}
+
+
+/* Report feature cards */
+
+.feature {
+    background:
+        rgba(13,34,44,0.94) !important;
+
+    color: #ffffff !important;
+}
+
+.feature span {
+    color: #ffffff !important;
+}
+
+.feature h3 {
+    color: #e4b85c !important;
+}
+
+.feature p {
+    color: #d5e0e3 !important;
+}
+
+
+/* Submit report card */
+
+.report-card {
+    background:
+        rgba(13,34,44,0.94) !important;
+
+    color: #ffffff !important;
+}
+
+.report-card h3 {
+    color: #e4b85c !important;
+}
+
+.report-card p {
+    color: #d5e0e3 !important;
+}
+
+.small-text {
+    color: #aebfc4 !important;
+}
+
+
+/* Report button */
+
+.report-btn {
+    background:
+        #c74747 !important;
+
+    color: #ffffff !important;
+}
+
+.report-btn:hover {
+    background:
+        #dc5753 !important;
+
+    transform:
+        translateY(-2px);
+}
+
+
+/* =====================================================
+   DASHBOARD
+===================================================== */
+
+.dashboard-title {
+    color: #ffffff !important;
+
+    background: none !important;
+
+    -webkit-text-fill-color:
+        #ffffff !important;
+
+    font-weight: 700;
+
+    text-shadow:
+        0 2px 15px rgba(0,0,0,0.55);
+}
+
+.dashboard-card {
+    background:
+        rgba(13,34,44,0.94) !important;
+
+    color: #ffffff !important;
+}
+
+.dashboard-card h3 {
+    color: #8ed3df !important;
+}
+
+.dashboard-card p {
+    color: #ffffff !important;
+
+    font-size: 24px;
+
+    font-weight: 700;
+}
+
+
+/* =====================================================
+   INPUTS / FORM
+===================================================== */
+
+form {
+    background:
+        rgba(13,34,44,0.94) !important;
+
+    color: #ffffff !important;
+
+    border:
+        1px solid var(--border);
+
+    border-radius: 16px;
+
+    box-shadow:
+        0 12px 35px rgba(0,0,0,0.30);
+}
+
+input,
+textarea {
+    background:
+        #0b202a !important;
+
+    color:
+        #ffffff !important;
+
+    border:
+        1px solid rgba(255,255,255,0.16) !important;
+
+    border-radius:
+        8px;
+}
+
+input::placeholder,
+textarea::placeholder {
+    color:
+        #91a5ac !important;
+}
+
+input:focus,
+textarea:focus {
+
+    outline: none;
+
+    border-color:
+        #2aa6b8 !important;
+
+    box-shadow:
+        0 0 0 2px
+        rgba(42,166,184,0.12);
+}
+
+
+/* =====================================================
+   BUTTONS
+===================================================== */
+
+button,
+.danger-btn {
+
+    background:
+        #126b78 !important;
+
+    color:
+        #ffffff !important;
+
+    border:
+        1px solid
+        rgba(255,255,255,0.12) !important;
+
+    border-radius:
+        8px;
+
+    box-shadow:
+        0 6px 18px
+        rgba(0,0,0,0.25);
+
+    transition:
+        0.25s ease;
+}
+
+button:hover,
+.danger-btn:hover {
+
+    background:
+        #178397 !important;
+
+    transform:
+        translateY(-2px);
+
+    box-shadow:
+        0 8px 22px
+        rgba(0,0,0,0.35);
+}
+
+
+/* =====================================================
+   RISK COLORS
+===================================================== */
+
+.low {
+    background:
+        #238b62 !important;
+    color: #ffffff !important;
+}
+
+.medium {
+    background:
+        #c28a32 !important;
+    color: #ffffff !important;
+}
+
+.high {
+    background:
+        #c74747 !important;
+    color: #ffffff !important;
+}
+
+
+/* =====================================================
+   ALERT BOX
+===================================================== */
+
+#alertBox {
+    color: #ffffff !important;
+}
+
+.alert-low {
+    color: #ffffff !important;
+}
+
+.alert-medium {
+    color: #ffffff !important;
+}
+
+.alert-high {
+    color: #ffffff !important;
+}
+
+
+/* =====================================================
+   MAP
+===================================================== */
+
+#map {
+
+    border:
+        1px solid
+        rgba(255,255,255,0.12) !important;
+
+    border-radius:
+        14px;
+
+    box-shadow:
+        0 12px 30px
+        rgba(0,0,0,0.35);
+
+    overflow:
+        hidden;
+}
+
+
+/* =====================================================
+   ICONS
+===================================================== */
+
+.icon {
+    filter:
+        none !important;
+
+    text-shadow:
+        none !important;
+
+    transition:
+        transform 0.25s ease;
+}
+
+.icon:hover {
+    transform:
+        translateY(-3px);
+}
+
+
+/* =====================================================
+   FOOTER
+===================================================== */
+
+footer {
+
+    background:
+        #06141c !important;
+
+    border-top:
+        1px solid
+        rgba(255,255,255,0.10);
+
+    color:
+        #c8d5d9 !important;
+}
+
+
+/* =====================================================
+   SCROLLBAR
+===================================================== */
+
+::-webkit-scrollbar {
+    width:
+        8px;
+}
+
+::-webkit-scrollbar-track {
+    background:
+        #07141c;
+}
+
+::-webkit-scrollbar-thumb {
+    background:
+        #285563;
+
+    border-radius:
+        10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background:
+        #367383;
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media(max-width:768px) {
+
+    body {
+        background-attachment:
+            scroll;
+    }
+
+    #home h2 {
+        font-size:
+            38px;
+    }
+
+    #home p {
+        font-size:
+            18px;
+    }
+
+    .icon {
+        font-size:
+            38px;
+    }
+
+    .dashboard-card p {
+        font-size:
+            21px;
+    }
+
+    .gallery-title,
+    .contact-title,
+    .safety-title,
+    .dashboard-title {
+        font-size:
+            32px;
+    }
+
+}
+
+
+
