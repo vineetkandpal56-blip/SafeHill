@@ -34,14 +34,12 @@ html {
 body {
     font-family: Arial, Helvetica, sans-serif;
 
-    background:
-        radial-gradient(circle at 20% 10%, rgba(0, 180, 216, 0.18), transparent 35%),
-        radial-gradient(circle at 85% 80%, rgba(34, 197, 94, 0.12), transparent 30%),
-        linear-gradient(135deg, #061525, #0a2633, #07131f);
+    background: #061c24;
 
     color: #ffffff;
     line-height: 1.6;
     min-height: 100vh;
+    position: relative;
 }
 body::before {
     content: "";
@@ -52,17 +50,35 @@ body::before {
 
     background:
         radial-gradient(
-            circle at 20% 20%,
-            rgba(56, 189, 248, 0.10),
-            transparent 35%
+            ellipse at 50% -10%,
+            rgba(20, 184, 166, 0.32),
+            transparent 52%
         ),
         radial-gradient(
-            circle at 80% 70%,
-            rgba(34, 197, 94, 0.08),
-            transparent 35%
+            ellipse at 10% 90%,
+            rgba(14, 116, 144, 0.22),
+            transparent 40%
+        ),
+        radial-gradient(
+            ellipse at 90% 60%,
+            rgba(45, 212, 191, 0.14),
+            transparent 38%
         );
 }
+body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: -1;
 
+    background:
+        radial-gradient(
+            ellipse at center,
+            transparent 30%,
+            rgba(0, 0, 0, 0.55) 100%
+        );
+}
 a {
     color: inherit;
     text-decoration: none;
