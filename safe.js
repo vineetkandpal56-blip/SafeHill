@@ -1,797 +1,106 @@
-// // ================================
-// // SafeHill - script.js (PART 1)
-// // ================================
 
-// // Weather Elements
+/* =========================================================
+   SAFEHILL
+   ORIGINAL GPS LOCATION + REAL DISTANCE TO KWARAB
+   ========================================================= */
 
-// const weatherStatus = document.getElementById("weatherStatus");
-// const temperature = document.getElementById("temperature");
-// const rainfall = document.getElementById("rainfall");
-// const wind = document.getElementById("wind");
+const KWARAB = {
+    lat: 29.60,
+    lon: 79.53,
+    name: "Kwarab Pool, Almora, Uttarakhand"
+};
 
-// const alertMessage = document.getElementById("alert-message");
-// const alertBox = document.getElementById("alert-box");
+let map = null;
+let userMarker = null;
+let accuracyCircle = null;
+let locationWatchId = null;
 
-// // Siren
+let currentLatitude = null;
+let currentLongitude = null;
+let currentAccuracy = null;
 
-// const siren = new Audio("Standard Emergency Warning Signal - QuickSounds.com.mp3");
 
-// siren.loop = false;
+/* =========================================================
+   START
+   ========================================================= */
 
-// // ------------------------------
-// // Load Weather
-// // ------------------------------
+document.addEventListener("DOMContentLoaded", () => {
 
-// async function loadWeather(){
+    initializeMap();
+    setupButtons();
+    detectCurrentLocation();
 
-// const latitude = 29.60;
+});
 
-// const longitude = 79.53;
 
-// const api = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,wind_speed_10m,precipitation`;
+/* =========================================================
+   BUTTONS
+   ========================================================= */
 
-// try{
+function setupButtons() {
 
-// const response = await fetch(api);
+    const button =
+        document.getElementById("detectLocationBtn");
 
-// const data = await response.json();
+    if (button) {
 
-// const current = data.current;
+        button.addEventListener("click", () => {
 
-// temperature.innerHTML =
-// current.temperature_2m + " °C";
+            button.disabled = true;
+            button.innerText = "📍 Detecting...";
 
-// wind.innerHTML =
-// current.wind_speed_10m + " km/h";
+            detectCurrentLocation();
 
+            setTimeout(() => {
+                button.disabled = false;
+                button.innerText = "📍 Detect My Location";
+            }, 3000);
 
-
-// rainfall.innerHTML =
-// rain + " mm";
-// const rain = current.precipitation || 0;
-
-// updateDashboard(current, rain);
-
-// rainfall.innerHTML = rain + " mm";
-
-// if(rain >=10){
-
-// dangerAlert();
-
-// }
-
-// else if(rain>=2){
-
-// mediumAlert();
-
-// }
-
-// else{
-
-// safeAlert();
-
-// }
-
-// }
-
-// catch(error){
-
-// console.log(error);
-
-// weatherStatus.innerHTML="Weather Not Available";
-
-// }
-
-// }
-
-// // ------------------------------
-// // Safe Alert
-// // ------------------------------
-
-// function safeAlert(){
-
-// weatherStatus.innerHTML="☀ Weather Normal";
-
-// alertBox.style.background="#00b894";
-
-// alertBox.style.color="#ffffff";
-
-// alertMessage.innerHTML=
-// "Safe to Travel";
-
-// }
-
-// // ------------------------------
-// // Medium Alert
-// // ------------------------------
-
-// function mediumAlert(){
-
-// weatherStatus.innerHTML="🌦 Moderate Rain";
-
-// alertBox.style.background="#f39c12";
-
-// alertBox.style.color="#ffffff";
-
-// alertMessage.innerHTML=
-// "Moderate Rain. Stay Alert.";
-
-// }
-
-// // ------------------------------
-// // Danger Alert
-// // ------------------------------
-
-// // =====================================
-// // VOICE WARNING FUNCTION
-// // =====================================
-
-// function speakWarning(message) {
-
-//     window.speechSynthesis.cancel();
-
-//     const speech = new SpeechSynthesisUtterance(message);
-
-//     speech.lang = "en-US";
-
-//     speech.rate = 0.9;
-
-//     speech.pitch = 1;
-
-//     speech.volume = 1;
-
-//     window.speechSynthesis.speak(speech);
-
-// }
-
-
-// // =====================================
-// // DANGER ALERT FUNCTION
-// // =====================================
-
-// function dangerAlert() {
-
-//     weatherStatus.innerHTML = "🌧 Heavy Rain";
-
-//     alertBox.style.background = "#d32f2f";
-
-//     alertBox.style.color = "#ffffff";
-
-//     alertBox.style.padding = "15px";
-
-//     alertBox.style.borderRadius = "10px";
-
-//     alertMessage.innerHTML =
-//         "⚠ HIGH LANDSLIDE RISK - Avoid Travelling Near Kwarab";
-
-//     // Play Siren
-
-//     siren.play().catch(() => {
-//         console.log("Siren file not found.");
-//     });
-
-//     // Voice Warning
-
-//     speakWarning(
-//         "Warning! Heavy rain detected near Kwarab. High landslide risk. Please avoid travelling and stay safe."
-//     );
-
-//     // Popup
-
-//     alert(
-//         "⚠ WARNING!\n\nHeavy Rain Detected Near Kwarab.\n\nHigh Landslide Risk.\n\nAvoid Travelling."
-//     );
-
-// }
-// // ===================================
-// // SafeHill - script.js (PART 2)
-// // ===================================
-
-// // ----------- Current Location ------------
-
-// function getLocation(){
-
-// if(navigator.geolocation){
-
-// navigator.geolocation.getCurrentPosition(showPosition,errorLocation);
-
-// }else{
-
-// console.log("Geolocation Not Supported");
-
-// }
-
-// }
-
-// function showPosition(position){
-
-// const lat = position.coords.latitude;
-
-// const lon = position.coords.longitude;
-
-// console.log("Latitude : " + lat);
-
-// console.log("Longitude : " + lon);
-
-// }
-
-// function errorLocation(){
-
-// alert("Location Permission Denied");
-
-// }
-
-// // ----------- Form Validation ------------
-
-// const form = document.querySelector("form");
-
-// if(form){
-
-// form.addEventListener("submit",function(e){
-
-// e.preventDefault();
-
-// const name=document.querySelector("input[type='text']").value;
-
-// if(name==""){
-
-// alert("Please Enter Your Name");
-
-// return;
-
-// }
-
-// alert("✅ Report Submitted Successfully");
-
-// form.reset();
-
-// });
-
-// }
-
-// // ----------- Dark Mode ------------
-
-// function toggleDarkMode(){
-
-// document.body.classList.toggle("dark");
-
-// }
-
-// // ----------- Risk Meter ------------
-
-// function updateRisk(level){
-
-// const risk=document.getElementById("risk-level");
-
-// if(!risk) return;
-
-// if(level=="LOW"){
-
-// risk.innerHTML="🟢 LOW";
-
-// risk.style.color="green";
-
-// }
-
-// else if(level=="MEDIUM"){
-
-// risk.innerHTML="🟡 MEDIUM";
-
-// risk.style.color="orange";
-
-// }
-
-// else{
-
-// risk.innerHTML="🔴 HIGH";
-
-// risk.style.color="red";
-
-// }
-
-// }
-
-// // ----------- Auto Refresh Weather ------------
-
-// setInterval(function(){
-
-// loadWeather();
-
-// },600000);
-
-// // Every 10 Minutes
-
-// // ----------- Page Load ------------
-
-// window.onload=function(){
-
-// loadWeather();
-
-// getLocation();
-
-// };
-// // ======================================
-// // SafeHill - script.js (PART 3)
-// // ======================================
-
-// // Stop Siren
-// function stopSiren() {
-//     siren.pause();
-//     siren.currentTime = 0;
-// }
-
-// // Start Siren
-// function startSiren() {
-//     siren.play();
-// }
-
-// // Manual Emergency Button
-// const emergencyBtn = document.getElementById("emergencyBtn");
-
-// if (emergencyBtn) {
-
-//     emergencyBtn.addEventListener("click", function () {
-
-//         startSiren();
-
-//         alert("🚨 Emergency Alert Activated!");
-
-//     });
-
-// }
-
-// // ----------------------
-// // Heavy Rain Popup
-// // ----------------------
-
-// function showPopup(message) {
-
-//     const popup = document.createElement("div");
-
-//     popup.innerHTML = message;
-
-//     popup.style.position = "fixed";
-//     popup.style.top = "20px";
-//     popup.style.right = "20px";
-//     popup.style.background = "red";
-//     popup.style.color = "white";
-//     popup.style.padding = "20px";
-//     popup.style.borderRadius = "10px";
-//     popup.style.zIndex = "9999";
-//     popup.style.fontSize = "18px";
-//     popup.style.fontWeight = "bold";
-
-//     document.body.appendChild(popup);
-
-//     setTimeout(function () {
-
-//         popup.remove();
-
-//     }, 6000);
-
-// }
-
-// // ----------------------
-// // Simulated Rain Check
-// // ----------------------
-
-// function simulateRain() {
-
-//     const rain = Math.floor(Math.random() * 15);
-
-//     if (rain >= 10) {
-
-//         updateRisk("HIGH");
-
-//         showPopup("🚨 Heavy Rain Detected! High Landslide Risk.");
-
-//         startSiren();
-
-//     } else if (rain >= 2) {
-
-//         updateRisk("MEDIUM");
-
-//         showPopup("⚠ Moderate Rain. Stay Alert.");
-
-//     } else {
-
-//         updateRisk("LOW");
-
-//     }
-
-// }
-
-// // ----------------------
-// // Kwarab Information
-// // ----------------------
-
-// console.log("Danger Zone : Kwarab Pool, Almora");
-
-// console.log("Risk : HIGH During Heavy Rain");
-
-// console.log("Coordinates : 29.60 , 79.53");
-
-// // ----------------------
-// // Refresh Simulation
-// // ----------------------
-
-// setInterval(function () {
-
-//     simulateRain();
-
-// }, 300000);
-
-// // Every 5 Minutes
-
-// // ----------------------
-// // Welcome Message
-// // ----------------------
-
-// console.log("===================================");
-
-// console.log(" SafeHill Disaster Alert System ");
-
-// console.log(" Developed for BCA Project ");
-
-// console.log(" Location : Almora, Uttarakhand ");
-
-// console.log("===================================");
-// const reportForm =
-// document.getElementById("reportForm");
-
-// if(reportForm){
-
-// reportForm.addEventListener("submit",function(e){
-
-// e.preventDefault();
-
-// document.getElementById("reportSuccess").innerHTML=
-
-// "✅ Your report has been submitted successfully.";
-
-// reportForm.reset();
-
-// });
-
-// }
-// // Kwarab Coordinates
-// const kwarabLat = 29.60;
-// const kwarabLng = 79.53;
-
-// // Create Map
-// const map = L.map("map").setView([kwarabLat, kwarabLng], 11);
-
-// // OpenStreetMap
-// L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{
-// maxZoom:19
-// }).addTo(map);
-
-// // Kwarab Marker
-// L.marker([kwarabLat,kwarabLng])
-// .addTo(map)
-// .bindPopup("⚠ Kwarab Landslide Danger Zone")
-// .openPopup();
-
-
-// // Get User Location
-
-// if(navigator.geolocation){
-
-// navigator.geolocation.getCurrentPosition(function(position){
-
-// const userLat = position.coords.latitude;
-// const userLng = position.coords.longitude;
-
-// // Blue Marker
-// L.marker([userLat,userLng])
-// .addTo(map)
-// .bindPopup("📍 You are Here")
-// .openPopup();
-
-// // Line Between User & Kwarab
-// L.polyline([
-// [userLat,userLng],
-// [kwarabLat,kwarabLng]
-// ],{
-// color:"blue",
-// weight:3
-// }).addTo(map);
-
-// });
-
-// }
-// function updateDashboard(current, rain) {
-
-//     document.getElementById("dashboardTemp").innerHTML =
-//         current.temperature_2m + " °C";
-
-//     document.getElementById("dashboardWind").innerHTML =
-//         current.wind_speed_10m + " km/h";
-
-//     document.getElementById("dashboardRain").innerHTML =
-//         rain + " mm";
-
-//     if (rain >= 10) {
-//         document.getElementById("dashboardRisk").innerHTML = "🔴 HIGH";
-//     } 
-//     else if (rain >= 2) {
-//         document.getElementById("dashboardRisk").innerHTML = "🟡 MEDIUM";
-//     } 
-//     else {
-//         document.getElementById("dashboardRisk").innerHTML = "🟢 LOW";
-//     }
-
-//     document.getElementById("lastUpdated").innerHTML =
-//         new Date().toLocaleTimeString();
-
-// }
-
-/* =====================================================
-   SAFEHILL — TOURIST SAFETY SYSTEM
-   Location → Danger Zone → Notification
-   → Weather → Alarm/Voice → Safety Guidance
-===================================================== */
-
-
-/* =====================================================
-   1. WEATHER ELEMENTS
-===================================================== */
-
-const weatherStatus = document.getElementById("weatherStatus");
-const temperature = document.getElementById("temperature");
-const rainfall = document.getElementById("rainfall");
-const wind = document.getElementById("wind");
-
-const alertMessage = document.getElementById("alert-message");
-const alertBox = document.getElementById("alert-box");
-
-
-/* =====================================================
-   2. EMERGENCY SIREN
-===================================================== */
-
-const siren = new Audio("Standard Emergency Warning Signal - QuickSounds.com.mp3");
-
-siren.volume = 1.0;
-siren.loop = false;
-
-function playSiren() {
-    siren.currentTime = 0;
-
-    siren.play().catch(error => {
-        console.log("Siren blocked:", error);
-    });
-}
-
-
-/* =====================================================
-   3. UTTARAKHAND MONITORED DISASTER LOCATIONS
-===================================================== */
-
-const disasterZones = [
-
-    {
-        name: "Kwarab",
-        district: "Almora",
-        lat: 29.60,
-        lng: 79.53,
-        radius: 5000,
-        risk: "HIGH"
-    },
-
-    {
-        name: "Nainital",
-        district: "Nainital",
-        lat: 29.3919,
-        lng: 79.4542,
-        radius: 5000,
-        risk: "HIGH"
-    },
-
-    {
-        name: "Joshimath",
-        district: "Chamoli",
-        lat: 30.5560,
-        lng: 79.5640,
-        radius: 7000,
-        risk: "HIGH"
-    },
-
-    {
-        name: "Kedarnath",
-        district: "Rudraprayag",
-        lat: 30.7346,
-        lng: 79.0669,
-        radius: 5000,
-        risk: "HIGH"
-    },
-
-    {
-        name: "Badrinath",
-        district: "Chamoli",
-        lat: 30.7433,
-        lng: 79.4938,
-        radius: 5000,
-        risk: "HIGH"
-    },
-
-    {
-        name: "Uttarkashi",
-        district: "Uttarkashi",
-        lat: 30.7268,
-        lng: 78.4354,
-        radius: 5000,
-        risk: "HIGH"
-    },
-
-    {
-        name: "Dharchula",
-        district: "Pithoragarh",
-        lat: 29.8477,
-        lng: 80.5150,
-        radius: 5000,
-        risk: "HIGH"
-    },
-
-    {
-        name: "Devprayag",
-        district: "Tehri Garhwal",
-        lat: 30.1460,
-        lng: 78.6020,
-        radius: 5000,
-        risk: "MODERATE"
-    }
-
-];
-
-
-/* =====================================================
-   4. DISTANCE CALCULATION
-===================================================== */
-
-function calculateDistance(lat1, lon1, lat2, lon2) {
-
-    const R = 6371000;
-
-    const dLat =
-        (lat2 - lat1) * Math.PI / 180;
-
-    const dLon =
-        (lon2 - lon1) * Math.PI / 180;
-
-    const a =
-        Math.sin(dLat / 2) *
-        Math.sin(dLat / 2) +
-
-        Math.cos(lat1 * Math.PI / 180) *
-        Math.cos(lat2 * Math.PI / 180) *
-
-        Math.sin(dLon / 2) *
-        Math.sin(dLon / 2);
-
-    const c =
-        2 *
-        Math.atan2(
-            Math.sqrt(a),
-            Math.sqrt(1 - a)
-        );
-
-    return R * c;
-}
-
-
-/* =====================================================
-   5. FIND NEAREST DISASTER ZONE
-===================================================== */
-
-function findNearbyDangerZone(lat, lng) {
-
-    let nearestZone = null;
-    let nearestDistance = Infinity;
-
-    disasterZones.forEach(zone => {
-
-        const distance =
-            calculateDistance(
-                lat,
-                lng,
-                zone.lat,
-                zone.lng
-            );
-
-        if (distance < nearestDistance) {
-
-            nearestDistance = distance;
-            nearestZone = zone;
-
-        }
-
-    });
-
-    if (
-        nearestZone &&
-        nearestDistance <= nearestZone.radius
-    ) {
-
-        return {
-            zone: nearestZone,
-            distance: nearestDistance
-        };
+        });
 
     }
 
-    return null;
-}
 
+    const retry =
+        document.getElementById("locationPopupRetry");
 
-/* =====================================================
-   6. DISTANCE FORMAT
-===================================================== */
+    if (retry) {
 
-function formatDistance(distance) {
+        retry.addEventListener("click", () => {
 
-    if (distance < 1000) {
+            retry.style.display = "none";
 
-        return Math.round(distance) + " metres";
+            detectCurrentLocation();
 
-    }
-
-    return (
-        (distance / 1000).toFixed(1)
-        + " km"
-    );
-
-}
-
-
-/* =====================================================
-   7. BROWSER NOTIFICATION
-===================================================== */
-
-async function requestNotificationPermission() {
-
-    if (!("Notification" in window)) {
-
-        console.log(
-            "Browser notifications are not supported."
-        );
-
-        return false;
+        });
 
     }
 
-    if (Notification.permission === "granted") {
 
-        return true;
+    const refresh =
+        document.getElementById("refreshWeather");
 
-    }
+    if (refresh) {
 
-    if (Notification.permission !== "denied") {
+        refresh.addEventListener("click", () => {
 
-        const permission =
-            await Notification.requestPermission();
+            if (
+                currentLatitude !== null &&
+                currentLongitude !== null
+            ) {
 
-        return permission === "granted";
+                loadWeather(
+                    currentLatitude,
+                    currentLongitude
+                );
 
-    }
+            } else {
 
-    return false;
+                showLocationMessage(
+                    "Location has not been detected yet."
+                );
 
-}
-
-
-function sendNotification(title, message) {
-
-    if (
-        "Notification" in window &&
-        Notification.permission === "granted"
-    ) {
-
-        new Notification(title, {
-
-            body: message,
-
-            icon: "pexels-jplenio-20364510.jpg"
+            }
 
         });
 
@@ -800,521 +109,16 @@ function sendNotification(title, message) {
 }
 
 
-/* =====================================================
-   8. VOICE WARNING
-===================================================== */
-
-function speakWarning(message) {
-
-    if (!("speechSynthesis" in window)) {
-
-        return;
-
-    }
-
-    window.speechSynthesis.cancel();
-
-    const speech =
-        new SpeechSynthesisUtterance(message);
-
-    speech.lang = "en-US";
-
-    speech.rate = 0.9;
-
-    speech.pitch = 1;
-
-    speech.volume = 1;
-
-    window.speechSynthesis.speak(speech);
-
-}
-
-
-/* =====================================================
-   9. SAFETY GUIDANCE
-===================================================== */
-
-function showSafetyGuidance(zone, rain) {
-
-    const guidance =
-        document.getElementById("safetyGuidance");
-
-    if (!guidance) {
-
-        return;
-
-    }
-
-    guidance.innerHTML = `
-
-        <div class="safety-alert-card">
-
-            <h3>
-                🛡️ Safety Guidance
-            </h3>
-
-            <p>
-                You are near
-                <strong>${zone.name}</strong>,
-                a monitored landslide-prone area.
-            </p>
-
-            ${
-                rain >= 10
-
-                ?
-
-                `
-                <p>
-                    🚨 Heavy rainfall is currently detected.
-                    Please avoid unnecessary travel.
-                </p>
-                `
-
-                :
-
-                `
-                <p>
-                    Weather conditions are currently
-                    being monitored.
-                </p>
-                `
-            }
-
-            <ul>
-
-                <li>
-                    Avoid stopping near steep slopes.
-                </li>
-
-                <li>
-                    Do not cross blocked or flooded roads.
-                </li>
-
-                <li>
-                    Keep a safe distance from unstable slopes.
-                </li>
-
-                <li>
-                    Follow local authority instructions.
-                </li>
-
-                <li>
-                    Move to a safer location if conditions worsen.
-                </li>
-
-            </ul>
-
-        </div>
-
-    `;
-
-}
-
-
-/* =====================================================
-   10. DANGER ZONE NOTIFICATION
-===================================================== */
-
-let locationWarningShown = false;
-
-function handleDangerZone(zoneData) {
-
-    if (!zoneData) {
-
-        return;
-
-    }
-
-    const zone =
-        zoneData.zone;
-
-    const distance =
-        zoneData.distance;
-
-
-    /* First notification */
-
-    if (!locationWarningShown) {
-
-        locationWarningShown = true;
-
-        const message =
-            `You are approaching ${zone.name}, ` +
-            `a monitored landslide-prone area.`;
-
-        sendNotification(
-            "⚠️ SafeHill Location Alert",
-            message
-        );
-
-        showPopup(
-            `
-            ⚠️ <strong>LANDSLIDE-PRONE AREA</strong>
-            <br><br>
-            You are near
-            <strong>${zone.name}</strong>.
-            <br>
-            Distance:
-            ${formatDistance(distance)}
-            `
-        );
-
-        speakWarning(
-            `Warning! You are approaching
-            a landslide-prone area near
-            ${zone.name}. Please stay alert.`
-        );
-
-    }
-
-}
-
-
-/* =====================================================
-   11. LOAD WEATHER FOR USER LOCATION
-===================================================== */
-
-async function checkLocationWeather(
-    latitude,
-    longitude,
-    zoneData
-) {
-
-    const api =
-        `https://api.open-meteo.com/v1/forecast` +
-        `?latitude=${latitude}` +
-        `&longitude=${longitude}` +
-        `&current=temperature_2m,wind_speed_10m,rain`;
-
-
-    try {
-
-        const response =
-            await fetch(api);
-
-        const data =
-            await response.json();
-
-        const current =
-            data.current;
-
-
-        const rain =
-            current.rain || 0;
-
-
-        /* Update normal weather */
-
-        if (temperature) {
-
-            temperature.innerHTML =
-                current.temperature_2m +
-                " °C";
-
-        }
-
-        if (wind) {
-
-            wind.innerHTML =
-                current.wind_speed_10m +
-                " km/h";
-
-        }
-
-        if (rainfall) {
-
-            rainfall.innerHTML =
-                rain + " mm";
-
-        }
-
-
-        /* =================================================
-           HIGH WEATHER RISK
-        ================================================= */
-
-        if (
-            zoneData &&
-            rain >= 10
-        ) {
-
-            weatherStatus.innerHTML =
-                "🌧 Heavy Rain";
-
-            if (alertBox) {
-
-                alertBox.style.background =
-                    "#c74747";
-
-                alertBox.style.color =
-                    "#ffffff";
-
-            }
-
-            if (alertMessage) {
-
-                alertMessage.innerHTML =
-                    "⚠ HIGH LANDSLIDE RISK - Avoid Travelling Near " +
-                    zoneData.zone.name;
-
-            }
-
-
-            /* Notification */
-
-            sendNotification(
-
-                "🚨 SAFEHILL HIGH RISK ALERT",
-
-                `Heavy rainfall detected near ` +
-                `${zoneData.zone.name}. ` +
-                `Please avoid unnecessary travel.`
-
-            );
-
-
-            /* Voice */
-
-            speakWarning(
-
-                `Warning! Heavy rainfall detected near ` +
-                `${zoneData.zone.name}. ` +
-                `High landslide risk. ` +
-                `Please avoid travelling and stay safe.`
-
-            );
-
-
-            /* Siren */
-
-            siren.play().catch(() => {
-
-                console.log(
-                    "Siren requires user interaction."
-                );
-
-            });
-
-
-            /* Safety guidance */
-
-            showSafetyGuidance(
-                zoneData.zone,
-                rain
-            );
-
-
-            /* Dashboard */
-
-            updateRisk("HIGH");
-
-
-        }
-
-
-        /* =================================================
-           MODERATE WEATHER
-        ================================================= */
-
-        else if (
-            zoneData &&
-            rain >= 2
-        ) {
-
-            weatherStatus.innerHTML =
-                "🌦 Moderate Rain";
-
-            if (alertBox) {
-
-                alertBox.style.background =
-                    "#c28a32";
-
-                alertBox.style.color =
-                    "#ffffff";
-
-            }
-
-            if (alertMessage) {
-
-                alertMessage.innerHTML =
-                    "⚠ Moderate Rain. Stay Alert.";
-
-            }
-
-            showSafetyGuidance(
-                zoneData.zone,
-                rain
-            );
-
-            updateRisk("MEDIUM");
-
-        }
-
-
-        /* =================================================
-           NORMAL WEATHER
-        ================================================= */
-
-        else {
-
-            weatherStatus.innerHTML =
-                "☀ Weather Normal";
-
-            if (alertBox) {
-
-                alertBox.style.background =
-                    "#238b62";
-
-                alertBox.style.color =
-                    "#ffffff";
-
-            }
-
-            if (alertMessage) {
-
-                alertMessage.innerHTML =
-                    zoneData
-
-                    ?
-
-                    "Area is being monitored. " +
-                    "Weather conditions are currently normal."
-
-                    :
-
-                    "Safe to Travel";
-
-            }
-
-            updateRisk("LOW");
-
-        }
-
-
-        /* Dashboard */
-
-        updateDashboard(
-            current,
-            rain
-        );
-
-
-    }
-
-    catch (error) {
-
-        console.log(
-            "Weather error:",
-            error
-        );
-
-        if (weatherStatus) {
-
-            weatherStatus.innerHTML =
-                "Weather Not Available";
-
-        }
-
-    }
-
-}
-
-
-/* =====================================================
-   12. CHECK USER LOCATION
-===================================================== */
-
-function checkUserLocation(position) {
-
-    const latitude =
-        position.coords.latitude;
-
-    const longitude =
-        position.coords.longitude;
-
-
-    console.log(
-        "User Latitude:",
-        latitude
-    );
-
-    console.log(
-        "User Longitude:",
-        longitude
-    );
-
-
-    /* Find danger zone */
-
-    const zoneData =
-        findNearbyDangerZone(
-            latitude,
-            longitude
-        );
-
-
-    /* Location warning */
-
-    if (zoneData) {
-
-        handleDangerZone(
-            zoneData
-        );
-
-    }
-
-
-    /* Weather check */
-
-    checkLocationWeather(
-        latitude,
-        longitude,
-        zoneData
-    );
-
-
-    /* Update map */
-
-    updateUserMapLocation(
-        latitude,
-        longitude
-    );
-
-}
-
-
-/* =====================================================
-   13. LOCATION ERROR
-===================================================== */
-
-function locationError(error) {
-
-    console.log(
-        "Location error:",
-        error
-    );
-
-    if (weatherStatus) {
-
-        weatherStatus.innerHTML =
-            "📍 Location Permission Required";
-
-    }
-
-}
-
-
-/* =====================================================
-   14. START LOCATION MONITORING
-===================================================== */
-
-function startLocationMonitoring() {
+/* =========================================================
+   GET REAL DEVICE LOCATION
+   ========================================================= */
+
+function detectCurrentLocation() {
 
     if (!navigator.geolocation) {
 
-        alert(
-            "Your browser does not support GPS location."
+        showLocationError(
+            "Geolocation is not supported by this browser."
         );
 
         return;
@@ -1322,550 +126,32 @@ function startLocationMonitoring() {
     }
 
 
-    navigator.geolocation.watchPosition(
+    showLocationPopup();
 
-        checkUserLocation,
-
-        locationError,
-
-        {
-
-            enableHighAccuracy: true,
-
-            maximumAge: 30000,
-
-            timeout: 15000
-
-        }
-
+    showLocationMessage(
+        "Requesting your current location..."
     );
-
-}
-
-
-/* =====================================================
-   15. MAP
-===================================================== */
-
-const kwarabLat = 29.60;
-const kwarabLng = 79.53;
-
-let map = null;
-let userMarker = null;
-
-
-function initializeMap() {
-
-    const mapElement =
-        document.getElementById("map");
-
-    if (!mapElement) {
-
-        return;
-
-    }
-
-
-    map =
-        L.map("map")
-            .setView(
-                [kwarabLat, kwarabLng],
-                7
-            );
-
-
-    L.tileLayer(
-        "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-        {
-
-            maxZoom: 19,
-
-            attribution:
-                "&copy; OpenStreetMap contributors"
-
-        }
-
-    ).addTo(map);
-
-
-    /* Add all disaster locations */
-
-    disasterZones.forEach(zone => {
-
-        L.marker([
-            zone.lat,
-            zone.lng
-        ])
-
-        .addTo(map)
-
-        .bindPopup(`
-            <strong>⚠️ ${zone.name}</strong>
-            <br>
-            ${zone.district}
-            <br>
-            Risk: ${zone.risk}
-        `);
-
-    });
-
-}
-
-
-/* =====================================================
-   16. UPDATE USER MARKER
-===================================================== */
-
-function updateUserMapLocation(
-    latitude,
-    longitude
-) {
-
-    if (!map) {
-
-        return;
-
-    }
-
-
-    if (userMarker) {
-
-        userMarker.setLatLng([
-            latitude,
-            longitude
-        ]);
-
-    }
-
-    else {
-
-        userMarker =
-            L.marker([
-                latitude,
-                longitude
-            ])
-
-            .addTo(map)
-
-            .bindPopup(
-                "📍 You are Here"
-            );
-
-    }
-
-}
-
-
-/* =====================================================
-   17. RISK METER
-===================================================== */
-
-function updateRisk(level) {
-
-    const risk =
-        document.getElementById(
-            "risk-level"
-        );
-
-    if (!risk) {
-
-        return;
-
-    }
-
-
-    if (level === "LOW") {
-
-        risk.innerHTML =
-            "🟢 LOW";
-
-        risk.style.color =
-            "green";
-
-    }
-
-    else if (level === "MEDIUM") {
-
-        risk.innerHTML =
-            "🟡 MEDIUM";
-
-        risk.style.color =
-            "orange";
-
-    }
-
-    else {
-
-        risk.innerHTML =
-            "🔴 HIGH";
-
-        risk.style.color =
-            "red";
-
-    }
-
-}
-
-
-/* =====================================================
-   18. DASHBOARD
-===================================================== */
-
-function updateDashboard(
-    current,
-    rain
-) {
-
-    const temp =
-        document.getElementById(
-            "dashboardTemp"
-        );
-
-    const windElement =
-        document.getElementById(
-            "dashboardWind"
-        );
-
-    const rainElement =
-        document.getElementById(
-            "dashboardRain"
-        );
-
-    const risk =
-        document.getElementById(
-            "dashboardRisk"
-        );
-
-    const updated =
-        document.getElementById(
-            "lastUpdated"
-        );
-
-
-    if (temp) {
-
-        temp.innerHTML =
-            current.temperature_2m +
-            " °C";
-
-    }
-
-    if (windElement) {
-
-        windElement.innerHTML =
-            current.wind_speed_10m +
-            " km/h";
-
-    }
-
-    if (rainElement) {
-
-        rainElement.innerHTML =
-            rain + " mm";
-
-    }
-
-
-    if (risk) {
-
-        if (rain >= 10) {
-
-            risk.innerHTML =
-                "🔴 HIGH";
-
-        }
-
-        else if (rain >= 2) {
-
-            risk.innerHTML =
-                "🟡 MEDIUM";
-
-        }
-
-        else {
-
-            risk.innerHTML =
-                "🟢 LOW";
-
-        }
-
-    }
-
-
-    if (updated) {
-
-        updated.innerHTML =
-            new Date()
-                .toLocaleTimeString();
-
-    }
-
-}
-
-
-/* =====================================================
-   19. POPUP
-===================================================== */
-
-function showPopup(message) {
-
-    const popup =
-        document.createElement("div");
-
-
-    popup.innerHTML =
-        message;
-
-
-    popup.style.position =
-        "fixed";
-
-    popup.style.top =
-        "20px";
-
-    popup.style.right =
-        "20px";
-
-    popup.style.maxWidth =
-        "360px";
-
-    popup.style.background =
-        "#10232d";
-
-    popup.style.color =
-        "#ffffff";
-
-    popup.style.padding =
-        "20px";
-
-    popup.style.borderRadius =
-        "12px";
-
-    popup.style.border =
-        "1px solid rgba(255,255,255,0.15)";
-
-    popup.style.boxShadow =
-        "0 10px 30px rgba(0,0,0,0.4)";
-
-    popup.style.zIndex =
-        "99999";
-
-    popup.style.fontSize =
-        "16px";
-
-    popup.style.lineHeight =
-        "1.6";
-
-
-    document.body.appendChild(
-        popup
-    );
-
-
-    setTimeout(
-        function () {
-
-            popup.remove();
-
-        },
-        7000
-    );
-
-}
-
-
-/* =====================================================
-   20. REQUEST PERMISSIONS
-===================================================== */
-
-async function initializeSafeHill() {
-
-    await requestNotificationPermission();
-
-    initializeMap();
-
-    startLocationMonitoring();
-
-}
-
-
-/* =====================================================
-   21. PAGE LOAD
-===================================================== */
-
-window.addEventListener(
-    "load",
-    function () {
-
-        initializeSafeHill();
-
-    }
-);
-/* =========================================
-   SAFEHILL — LOCATION DETECTION
-========================================= */
-
-function detectUserLocation() {
-
-    const status =
-        document.getElementById("locationStatus");
-
-    const result =
-        document.getElementById("locationResult");
-
-    const errorBox =
-        document.getElementById("locationError");
-
-    const button =
-        document.getElementById("detectLocationBtn");
-
-
-    // Clear old messages
-    errorBox.style.display = "none";
-    errorBox.innerHTML = "";
-
-    status.innerHTML =
-        "📍 Detecting your location...";
-
-    button.disabled = true;
-
-    button.innerHTML =
-        "⏳ Detecting...";
-
-
-    // Browser does not support GPS
-    if (!navigator.geolocation) {
-
-        status.innerHTML =
-            "❌ Location is not supported by this browser.";
-
-        button.disabled = false;
-
-        button.innerHTML =
-            "📍 Detect My Location";
-
-        return;
-    }
 
 
     navigator.geolocation.getCurrentPosition(
 
         function(position) {
 
-            const latitude =
-                position.coords.latitude;
+            processRealLocation(position);
 
-            const longitude =
-                position.coords.longitude;
-
-
-            console.log(
-                "Latitude:",
-                latitude
-            );
-
-            console.log(
-                "Longitude:",
-                longitude
-            );
-
-
-            document.getElementById(
-                "userLatitude"
-            ).textContent =
-                latitude.toFixed(6);
-
-
-            document.getElementById(
-                "userLongitude"
-            ).textContent =
-                longitude.toFixed(6);
-
-
-            status.innerHTML =
-                "✅ Location detected successfully.";
-
-
-            result.style.display =
-                "block";
-
-
-            button.disabled = false;
-
-            button.innerHTML =
-                "🔄 Detect Again";
-
-
-            // Find nearest monitored location
-            findNearestLocation(
-                latitude,
-                longitude
-            );
+            startContinuousLocation();
 
         },
-
 
         function(error) {
 
-            button.disabled = false;
-
-            button.innerHTML =
-                "📍 Detect My Location";
-
-
-            let message =
-                "Unable to detect location.";
-
-
-            if (error.code === 1) {
-
-                message =
-                    "❌ Location permission denied. " +
-                    "Please allow location access.";
-
-            }
-
-            else if (error.code === 2) {
-
-                message =
-                    "❌ Location unavailable. " +
-                    "Please check GPS/internet.";
-
-            }
-
-            else if (error.code === 3) {
-
-                message =
-                    "❌ Location request timed out. " +
-                    "Please try again.";
-
-            }
-
-
-            status.innerHTML =
-                message;
-
-
-            errorBox.style.display =
-                "block";
-
-            errorBox.innerHTML =
-                message;
-
-
-            console.log(
-                "Location Error:",
-                error
-            );
+            handleLocationError(error);
 
         },
 
-
         {
             enableHighAccuracy: true,
-
-            timeout: 20000,
-
+            timeout: 30000,
             maximumAge: 0
         }
 
@@ -1874,209 +160,1337 @@ function detectUserLocation() {
 }
 
 
-/* =========================================
-   MONITORED UTTARAKHAND LOCATIONS
-========================================= */
+/* =========================================================
+   CONTINUOUS REAL LOCATION
+   ========================================================= */
 
-const monitoredLocations = [
+function startContinuousLocation() {
 
-    {
-        name: "Kwarab, Almora",
-        lat: 29.60,
-        lng: 79.53
-    },
-
-    {
-        name: "Nainital",
-        lat: 29.3919,
-        lng: 79.4542
-    },
-
-    {
-        name: "Joshimath",
-        lat: 30.5560,
-        lng: 79.5640
-    },
-
-    {
-        name: "Badrinath",
-        lat: 30.7433,
-        lng: 79.4938
-    },
-
-    {
-        name: "Kedarnath",
-        lat: 30.7346,
-        lng: 79.0669
-    },
-
-    {
-        name: "Uttarkashi",
-        lat: 30.7268,
-        lng: 78.4354
-    },
-
-    {
-        name: "Dharchula",
-        lat: 29.8477,
-        lng: 80.5150
+    if (!navigator.geolocation) {
+        return;
     }
 
-];
+
+    if (locationWatchId !== null) {
+
+        navigator.geolocation.clearWatch(
+            locationWatchId
+        );
+
+    }
 
 
-/* =========================================
-   FIND NEAREST LOCATION
-========================================= */
+    locationWatchId =
+        navigator.geolocation.watchPosition(
 
-function findNearestLocation(
-    userLat,
-    userLng
-) {
+            function(position) {
 
-    let nearest = null;
+                processRealLocation(position);
 
-    let shortestDistance =
-        Infinity;
+            },
 
+            function(error) {
 
-    monitoredLocations.forEach(
-        function(location) {
-
-            const distance =
-                calculateDistance(
-                    userLat,
-                    userLng,
-                    location.lat,
-                    location.lng
+                console.warn(
+                    "Location update:",
+                    error.message
                 );
 
+            },
 
-            if (
-                distance <
-                shortestDistance
-            ) {
+            {
+    enableHighAccuracy: true,
+    timeout: 30000,
+    maximumAge: 0
+}
 
-                shortestDistance =
-                    distance;
+        );
 
-                nearest =
-                    location;
+}
 
-            }
 
-        }
+/* =========================================================
+   PROCESS ACTUAL LOCATION
+   ========================================================= */
+
+async function processRealLocation(position) {
+
+    const latitude =
+        position.coords.latitude;
+
+    const longitude =
+        position.coords.longitude;
+
+    const accuracy =
+        position.coords.accuracy;
+
+
+    /*
+       IMPORTANT:
+       These values come directly from the
+       browser/device geolocation API.
+    */
+
+    currentLatitude = latitude;
+    currentLongitude = longitude;
+    currentAccuracy = accuracy;
+
+
+    console.log(
+        "REAL DEVICE LOCATION:",
+        latitude,
+        longitude,
+        "Accuracy:",
+        accuracy,
+        "meters"
     );
 
 
-    if (nearest) {
+    /* =====================================================
+       SHOW RAW GPS COORDINATES
+       ===================================================== */
 
+    setText(
+        "userLatitude",
+        latitude.toFixed(6)
+    );
+
+    setText(
+        "userLongitude",
+        longitude.toFixed(6)
+    );
+
+
+    setText(
+        "currentCoordinates",
+        `Latitude: ${latitude.toFixed(6)}
+         Longitude: ${longitude.toFixed(6)}`
+    );
+
+
+    /* =====================================================
+       CALCULATE REAL DISTANCE
+       ===================================================== */
+
+       const distance =
+    await calculateRoadDistanceKm(
+        latitude,
+        longitude
+    );
+
+if (distance === null) {
+    showLocationMessage(
+        "Unable to calculate road distance."
+    );
+    return;
+}
+
+
+    /*
+       This is the actual calculated distance.
+       Nothing is hard-coded here.
+    */
+
+    setText(
+        "locationDistance",
+        formatDistance(distance)
+    );
+
+
+    setText(
+        "zoneDistance",
+        "Distance from Kwarab: " +
+        formatDistance(distance)
+    );
+
+
+    /* =====================================================
+       SHOW LOCATION RESULT
+       ===================================================== */
+
+    const result =
+        document.getElementById("locationResult");
+
+    if (result) {
+        result.style.display = "block";
+    }
+
+
+    /* =====================================================
+       UPDATE MAP
+       ===================================================== */
+
+    updateUserOnMap(
+        latitude,
+        longitude,
+        accuracy
+    );
+
+
+    /* =====================================================
+       CHECK KWARAB WARNING ZONE
+       IMPORTANT:
+       10 KM IS ONLY WARNING THRESHOLD.
+       IT IS NOT THE DISTANCE.
+       ===================================================== */
+
+    updateKwarabSafety(distance);
+
+
+    /* =====================================================
+       GET ACTUAL PLACE NAME
+       ===================================================== */
+
+    reverseGeocode(latitude, longitude);
+
+
+    /* =====================================================
+       WEATHER FOR ACTUAL CURRENT LOCATION
+       ===================================================== */
+
+    loadWeather(
+        latitude,
+        longitude
+    );
+
+
+    /* =====================================================
+       LAST UPDATED
+       ===================================================== */
+
+    setText(
+        "lastUpdated",
+        new Date().toLocaleTimeString(
+            "en-IN",
+            {
+                hour: "2-digit",
+                minute: "2-digit",
+                second: "2-digit"
+            }
+        )
+    );
+
+
+    showLocationMessage(
+        "📍 Current location detected successfully."
+    );
+
+
+    const touristStatus =
         document.getElementById(
-            "nearestLocation"
-        ).textContent =
-            nearest.name;
+            "touristLocationStatus"
+        );
 
+    if (touristStatus) {
 
-        document.getElementById(
-            "locationDistance"
-        ).textContent =
-            formatDistance(
-                shortestDistance
-            );
+        touristStatus.innerText =
+            "📍 Current location detected.";
 
     }
 
+
+    /* Close popup */
+
+    setTimeout(() => {
+
+        closeLocationPopup();
+
+    }, 1200);
+
 }
 
 
-/* =========================================
-   DISTANCE CALCULATION
-========================================= */
+/* =========================================================
+   REAL ROAD DISTANCE TO KWARAB
+   ========================================================= */
 
-function calculateDistance(
-    lat1,
-    lon1,
-    lat2,
-    lon2
-) {
+async function calculateRoadDistanceKm(latitude, longitude) {
 
-    const R = 6371;
+    try {
 
-    const dLat =
-        (lat2 - lat1) *
-        Math.PI / 180;
+        const url =
+            `https://router.project-osrm.org/route/v1/driving/` +
+            `${longitude},${latitude};${KWARAB.lon},${KWARAB.lat}` +
+            `?overview=false`;
 
-    const dLon =
-        (lon2 - lon1) *
-        Math.PI / 180;
+        const response = await fetch(url);
 
+        if (!response.ok) {
+            throw new Error("Road routing failed");
+        }
 
-    const a =
-        Math.sin(dLat / 2) *
-        Math.sin(dLat / 2) +
+        const data = await response.json();
 
-        Math.cos(
-            lat1 * Math.PI / 180
-        ) *
+        if (
+            data.code !== "Ok" ||
+            !data.routes ||
+            !data.routes.length
+        ) {
+            throw new Error("No road route found");
+        }
 
-        Math.cos(
-            lat2 * Math.PI / 180
-        ) *
+        // OSRM distance is in meters
+        const distanceKm =
+            data.routes[0].distance / 1000;
 
-        Math.sin(dLon / 2) *
-        Math.sin(dLon / 2);
-
-
-    const c =
-        2 *
-        Math.atan2(
-            Math.sqrt(a),
-            Math.sqrt(1 - a)
+        console.log(
+            "REAL ROAD DISTANCE FROM KWARAB:",
+            distanceKm,
+            "km"
         );
 
+        return distanceKm;
 
-    return R * c;
+    } catch (error) {
 
+        console.error(
+            "Road distance error:",
+            error
+        );
+
+        return null;
+    }
 }
 
 
-/* =========================================
-   FORMAT DISTANCE
-========================================= */
+/* =========================================================
+   DISTANCE DISPLAY
+   ========================================================= */
 
-function formatDistance(
-    distance
-) {
+function formatDistance(distanceKm) {
 
-    if (distance < 1) {
+    if (distanceKm < 1) {
 
         return (
-            Math.round(
-                distance * 1000
-            ) +
-            " metres"
+            (distanceKm * 1000).toFixed(0) +
+            " m"
         );
 
     }
 
 
     return (
-        distance.toFixed(2) +
+        distanceKm.toFixed(2) +
         " km"
     );
 
 }
-function speakHindiWarning() {
+
+
+/* =========================================================
+   KWARAB SAFETY STATUS
+   ========================================================= */
+
+function updateKwarabSafety(distance) {
+
+    const zone =
+        document.getElementById(
+            "nearbyZone"
+        );
+
+    const alert =
+        document.getElementById(
+            "touristAlert"
+        );
+
     const message =
-        "सावधान! आप भूस्खलन संभावित क्षेत्र में हैं। कृपया सुरक्षित रहें।";
+        document.getElementById(
+            "touristAlertMessage"
+        );
 
-    const speech = new SpeechSynthesisUtterance(message);
 
-    speech.lang = "hi-IN";
-    speech.rate = 0.85;
-    speech.pitch = 1;
-    speech.volume = 1;
+    /*
+       IMPORTANT:
+       Distance itself is NOT changed.
+       10 km is ONLY used for safety warning.
+    */
 
-    window.speechSynthesis.cancel();
-    window.speechSynthesis.speak(speech);
+
+    if (distance <= 2) {
+
+        if (zone) {
+
+            zone.innerText =
+                "🔴 You are very close to Kwarab Risk Zone.";
+
+        }
+
+        if (message) {
+
+            message.innerText =
+                "🔴 HIGH ATTENTION: You are very close to the monitored Kwarab area. Follow official safety instructions.";
+
+        }
+
+        if (alert) {
+
+            alert.style.background =
+                "rgba(239,68,68,0.12)";
+
+            alert.style.borderColor =
+                "rgba(239,68,68,0.3)";
+
+        }
+
+    }
+
+    else if (distance <= 10) {
+
+        if (zone) {
+
+            zone.innerText =
+                "🟠 You are within the Kwarab monitoring area.";
+
+        }
+
+        if (message) {
+
+            message.innerText =
+                "🟠 CAUTION: You are within 10 km of the monitored Kwarab area. Stay alert to weather and official warnings.";
+
+        }
+
+    }
+
+    else {
+
+        if (zone) {
+
+            zone.innerText =
+                "🟢 You are outside the 10 km Kwarab monitoring zone.";
+
+        }
+
+        if (message) {
+
+            message.innerText =
+                "🟢 You are outside the Kwarab monitoring zone.";
+
+        }
+
+        if (alert) {
+
+            alert.style.background =
+                "rgba(34,197,94,0.08)";
+
+            alert.style.borderColor =
+                "rgba(34,197,94,0.2)";
+
+        }
+
+    }
+
+}
+
+
+/* =========================================================
+   REVERSE GEOCODING
+   CURRENT LOCATION NAME
+   ========================================================= */
+
+async function reverseGeocode(
+    latitude,
+    longitude
+) {
+    
+
+    try {
+
+
+        const url =
+            `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latitude}&lon=${longitude}&zoom=18&addressdetails=1`;
+
+
+        const response =
+            await fetch(url, {
+                headers: {
+                    "Accept": "application/json"
+                }
+            });
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Reverse geocoding failed"
+            );
+
+        }
+
+
+        const data =
+            await response.json();
+
+
+        const address =
+            data.address || {};
+
+
+        /*
+           Pick the most specific place available.
+        */
+
+        const locality =
+    address.house_number && address.road
+        ? `${address.house_number}, ${address.road}`
+        : address.road ||
+          address.village ||
+          address.town ||
+          address.city ||
+          address.municipality ||
+          address.suburb ||
+          address.neighbourhood ||
+          "Current Location";
+
+        const state =
+            address.state || "";
+
+
+        const country =
+            address.country || "";
+
+
+        let currentPlace =
+            locality;
+
+
+        if (
+            state &&
+            !currentPlace.includes(state)
+        ) {
+
+            currentPlace +=
+                ", " + state;
+
+        }
+
+
+        if (
+            country &&
+            country !== "India" &&
+            !currentPlace.includes(country)
+        ) {
+
+            currentPlace +=
+                ", " + country;
+
+        }
+
+
+        console.log(
+            "CURRENT PLACE:",
+            currentPlace
+        );
+
+
+        /* Dashboard */
+
+        const currentLocation =
+    document.getElementById("nearestLocation");
+
+        if (currentLocation) {
+    currentLocation.innerText = currentPlace;
+}
+
+
+        /* Main location status */
+
+        const locationStatus =
+            document.getElementById(
+                "locationStatus"
+            );
+
+        if (locationStatus) {
+
+            locationStatus.innerText =
+                "📍 " + currentPlace;
+
+        }
+
+
+        /* Tourist location */
+
+        const touristStatus =
+            document.getElementById(
+                "touristLocationStatus"
+            );
+
+        if (touristStatus) {
+
+            touristStatus.innerText =
+                "📍 " + currentPlace;
+
+        }
+
+
+        /* Weather title */
+
+        const weatherStatus =
+            document.getElementById(
+                "weatherStatus"
+            );
+
+        if (weatherStatus) {
+
+            weatherStatus.innerText =
+                "🌦️ Weather at " +
+                currentPlace;
+
+        }
+
+
+    }
+
+    catch (error) {
+
+        console.warn(
+            "Could not get location name:",
+            error
+        );
+
+
+        const nearest =
+            document.getElementById(
+                "nearestLocation"
+            );
+
+        if (nearest) {
+
+            nearest.innerText =
+                "Current location detected";
+
+        }
+
+    }
+
+}
+
+
+/* =========================================================
+   MAP
+   ========================================================= */
+
+function initializeMap() {
+
+    const mapElement =
+        document.getElementById("map");
+
+    if (!mapElement) {
+        return;
+    }
+
+
+    map =
+        L.map("map").setView(
+            [KWARAB.lat, KWARAB.lon],
+            10
+        );
+
+
+    L.tileLayer(
+        "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+        {
+            maxZoom: 19,
+            attribution:
+                "&copy; OpenStreetMap contributors"
+        }
+    ).addTo(map);
+
+
+    /* Kwarab marker */
+
+    const kwarabMarker =
+        L.marker([
+            KWARAB.lat,
+            KWARAB.lon
+        ]).addTo(map);
+
+
+    kwarabMarker.bindPopup(`
+        <b>⚠️ Kwarab Pool</b><br>
+        Monitored Disaster Risk Zone<br>
+        Almora, Uttarakhand
+    `);
+
+
+    /* Kwarab monitoring circle */
+
+    L.circle(
+        [KWARAB.lat, KWARAB.lon],
+        {
+            radius: 10000,
+            color: "#ef4444",
+            fillColor: "#ef4444",
+            fillOpacity: 0.10
+        }
+    ).addTo(map);
+
+}
+
+
+/* =========================================================
+   USER MAP LOCATION
+   ========================================================= */
+
+function updateUserOnMap(
+    latitude,
+    longitude,
+    accuracy
+) {
+
+    if (!map) {
+        return;
+    }
+
+
+    const position =
+        [latitude, longitude];
+
+
+    if (!userMarker) {
+
+        userMarker =
+            L.marker(position)
+                .addTo(map)
+                .bindPopup(
+                    "<b>📍 You are here</b>"
+                );
+
+    }
+
+    else {
+
+        userMarker.setLatLng(
+            position
+        );
+
+    }
+
+
+    if (!accuracyCircle) {
+
+        accuracyCircle =
+            L.circle(
+                position,
+                {
+                    radius:
+                        accuracy || 50,
+
+                    color: "#38bdf8",
+
+                    fillColor: "#38bdf8",
+
+                    fillOpacity: 0.10
+                }
+            ).addTo(map);
+
+    }
+
+    else {
+
+        accuracyCircle.setLatLng(
+            position
+        );
+
+        accuracyCircle.setRadius(
+            accuracy || 50
+        );
+
+    }
+
+
+    /*
+       IMPORTANT:
+       Map follows the REAL USER LOCATION.
+    */
+
+    map.setView(
+        position,
+        14
+    );
+
+}
+
+
+/* =========================================================
+   WEATHER – CURRENT USER LOCATION
+   ========================================================= */
+
+function loadWeather(
+    latitude,
+    longitude
+) {
+
+    const weatherStatus =
+        document.getElementById(
+            "weatherStatus"
+        );
+
+
+    if (weatherStatus) {
+
+        weatherStatus.innerText =
+            "🌦️ Loading weather for your current location...";
+
+    }
+
+
+    const url =
+        `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,relative_humidity_2m,precipitation,rain,weather_code,wind_speed_10m,wind_gusts_10m&hourly=precipitation,precipitation_probability&forecast_hours=12&timezone=auto`;
+
+
+    fetch(url)
+
+        .then(response => {
+
+            if (!response.ok) {
+
+                throw new Error(
+                    "Weather API error"
+                );
+
+            }
+
+            return response.json();
+
+        })
+
+        .then(data => {
+
+            updateWeather(
+                data
+            );
+
+        })
+
+        .catch(error => {
+
+            console.error(
+                "Weather error:",
+                error
+            );
+
+
+            const errorElement =
+                document.getElementById(
+                    "weatherError"
+                );
+
+            if (errorElement) {
+
+                errorElement.innerText =
+                    "Unable to load current weather.";
+
+            }
+
+        });
+
+}
+
+
+/* =========================================================
+   WEATHER UI
+   ========================================================= */
+
+function updateWeather(data) {
+
+    const current =
+        data.current;
+
+
+    const temperature =
+        current.temperature_2m;
+
+    const rainfall =
+        current.rain ??
+        current.precipitation ??
+        0;
+
+    const wind =
+        current.wind_speed_10m ??
+        0;
+
+    const humidity =
+        current.relative_humidity_2m ??
+        0;
+
+    const gust =
+        current.wind_gusts_10m ??
+        0;
+
+
+    setText(
+        "temperature",
+        `${temperature} °C`
+    );
+
+    setText(
+        "rainfall",
+        `${rainfall} mm`
+    );
+
+    setText(
+        "wind",
+        `${wind} km/h`
+    );
+
+    setText(
+        "humidity",
+        `${humidity}%`
+    );
+
+    setText(
+        "windGusts",
+        `${gust} km/h`
+    );
+
+
+    setText(
+        "dashboardTemp",
+        `${temperature}°C`
+    );
+
+    setText(
+        "dashboardRain",
+        `${rainfall} mm`
+    );
+
+    setText(
+        "dashboardWind",
+        `${wind} km/h`
+    );
+
+
+    let probability = 0;
+
+    if (
+        data.hourly &&
+        data.hourly.precipitation_probability
+    ) {
+
+        probability =
+            data.hourly
+                .precipitation_probability[0] || 0;
+
+    }
+
+
+    setText(
+        "rainProbability",
+        `${probability}%`
+    );
+
+
+    let next3hRain = 0;
+
+    if (
+        data.hourly &&
+        data.hourly.precipitation
+    ) {
+
+        next3hRain =
+            data.hourly.precipitation
+                .slice(0, 3)
+                .reduce(
+                    (sum, value) =>
+                        sum + (value || 0),
+                    0
+                );
+
+    }
+
+
+    setText(
+        "next3hRain",
+        `${next3hRain.toFixed(1)} mm`
+    );
+
+
+    calculateRisk(
+        rainfall,
+        next3hRain,
+        probability,
+        wind,
+        gust,
+        current.weather_code
+    );
+
+}
+
+
+/* =========================================================
+   WEATHER RISK
+   ========================================================= */
+
+function calculateRisk(
+    rain,
+    next3h,
+    probability,
+    wind,
+    gust,
+    weatherCode
+) {
+
+    let score = 0;
+
+
+    if (rain >= 10) {
+
+        score += 3;
+
+    }
+
+    else if (rain >= 2) {
+
+        score += 2;
+
+    }
+
+    else if (rain > 0) {
+
+        score += 1;
+
+    }
+
+
+    if (next3h >= 15) {
+
+        score += 3;
+
+    }
+
+    else if (next3h >= 5) {
+
+        score += 2;
+
+    }
+
+    else if (next3h > 1) {
+
+        score += 1;
+
+    }
+
+
+    if (probability >= 80) {
+
+        score += 2;
+
+    }
+
+    else if (probability >= 50) {
+
+        score += 1;
+
+    }
+
+
+    if (
+        wind >= 35 ||
+        gust >= 50
+    ) {
+
+        score += 1;
+
+    }
+
+
+    if (
+        [65, 82, 95, 96, 99]
+            .includes(weatherCode)
+    ) {
+
+        score += 2;
+
+    }
+
+
+    let level = "LOW";
+    let emoji = "🟢";
+
+
+    if (score >= 5) {
+
+        level = "HIGH";
+        emoji = "🔴";
+
+    }
+
+    else if (score >= 2) {
+
+        level = "MEDIUM";
+        emoji = "🟡";
+
+    }
+
+
+    setText(
+        "dashboardRisk",
+        `${emoji} ${level}`
+    );
+
+
+    setText(
+        "risk-level",
+        `Current Risk : ${emoji} ${level}`
+    );
+
+
+    const alertMessage =
+        document.getElementById(
+            "alert-message"
+        );
+
+
+    if (alertMessage) {
+
+        if (level === "HIGH") {
+
+            alertMessage.innerText =
+                "🔴 HIGH WEATHER RISK: Severe weather conditions detected. Follow official alerts.";
+
+        }
+
+        else if (level === "MEDIUM") {
+
+            alertMessage.innerText =
+                "🟡 MEDIUM WEATHER RISK: Changing weather conditions detected. Stay alert.";
+
+        }
+
+        else {
+
+            alertMessage.innerText =
+                "🟢 LOW WEATHER RISK: Current weather conditions appear relatively normal.";
+
+        }
+
+    }
+
+}
+
+
+/* =========================================================
+   LOCATION POPUP
+   ========================================================= */
+
+function showLocationPopup() {
+
+    const popup =
+        document.getElementById(
+            "locationStartupPopup"
+        );
+
+    if (popup) {
+
+        popup.style.display =
+            "flex";
+
+    }
+
+}
+
+
+function closeLocationPopup() {
+
+    const popup =
+        document.getElementById(
+            "locationStartupPopup"
+        );
+
+    if (popup) {
+
+        popup.style.opacity = "0";
+
+        setTimeout(() => {
+
+            popup.style.display =
+                "none";
+
+            popup.style.opacity =
+                "1";
+
+        }, 300);
+
+    }
+
+}
+
+
+/* =========================================================
+   LOCATION STATUS
+   ========================================================= */
+
+function showLocationMessage(message) {
+
+    setText(
+        "locationStatus",
+        message
+    );
+
+}
+
+
+function showLocationError(message) {
+
+    console.error(
+        "LOCATION ERROR:",
+        message
+    );
+
+
+    setText(
+        "locationStatus",
+        message
+    );
+
+
+    const error =
+        document.getElementById(
+            "locationError"
+        );
+
+    if (error) {
+
+        error.innerText =
+            message;
+
+        error.style.display =
+            "block";
+
+    }
+
+
+    const popupTitle =
+        document.getElementById(
+            "locationPopupTitle"
+        );
+
+    const popupMessage =
+        document.getElementById(
+            "locationPopupMessage"
+        );
+
+    const popupStatus =
+        document.getElementById(
+            "locationPopupStatus"
+        );
+
+    const retry =
+        document.getElementById(
+            "locationPopupRetry"
+        );
+
+
+    if (popupTitle) {
+
+        popupTitle.innerText =
+            "Location Not Detected";
+
+    }
+
+
+    if (popupMessage) {
+
+        popupMessage.innerText =
+            "Please allow location access so SafeHill can calculate your actual distance from Kwarab.";
+
+    }
+
+
+    if (popupStatus) {
+
+        popupStatus.innerText =
+            message;
+
+    }
+
+
+    if (retry) {
+
+        retry.style.display =
+            "inline-block";
+
+    }
+
+}
+
+
+/* =========================================================
+   LOCATION ERRORS
+   ========================================================= */
+
+function handleLocationError(error) {
+
+    if (error.code === 1) {
+
+        showLocationError(
+            "Location permission denied. Please allow location access."
+        );
+
+    }
+
+    else if (error.code === 2) {
+
+        showLocationError(
+            "Your device could not determine your location. Please turn on GPS/location services."
+        );
+
+    }
+
+    else if (error.code === 3) {
+
+        showLocationError(
+            "Location request timed out. Please try again."
+        );
+
+    }
+
+    else {
+
+        showLocationError(
+            "Unable to detect your current location."
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   HELPER
+   ========================================================= */
+
+function setText(
+    id,
+    value
+) {
+
+    const element =
+        document.getElementById(id);
+
+    if (element) {
+
+        element.innerText =
+            value;
+
+    }
+
+}
+// ===============================
+// 🚨 SAFEHILL EMERGENCY ALARM
+// ===============================
+
+const alarmSound = new Audio("Standard Emergency Warning Signal - QuickSounds.com.mp3");
+alarmSound.loop = true;
+
+function startAlarm() {
+    alarmSound.play().catch(() => {
+        console.log("🔊 Alarm ke liye user interaction required hai.");
+    });
+}
+
+function stopAlarm() {
+    alarmSound.pause();
+    alarmSound.currentTime = 0;
 }
