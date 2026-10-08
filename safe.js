@@ -787,14 +787,42 @@ function initializeMap() {
         );
 
 
-    L.tileLayer(
-        "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-        {
-            maxZoom: 19,
-            attribution:
-                "&copy; OpenStreetMap contributors"
-        }
-    ).addTo(map);
+    /* ================= MAP LAYERS ================= */
+
+/* 🛰️ Clear Satellite */
+const satelliteLayer = L.tileLayer(
+    "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+    {
+        maxZoom: 20,
+        maxNativeZoom: 19,
+        attribution: "Tiles © Esri"
+    }
+);
+
+/* 🗺️ Normal Street Map */
+const streetLayer = L.tileLayer(
+    "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+    {
+        maxZoom: 19,
+        attribution: "© OpenStreetMap contributors"
+    }
+);
+
+/* Satellite default */
+satelliteLayer.addTo(map);
+
+
+/* 🔄 Map Layer Switcher */
+L.control.layers(
+    {
+        "🛰️ Satellite": satelliteLayer,
+        "🗺️ Street Map": streetLayer
+    },
+    null,
+    {
+        collapsed: false
+    }
+).addTo(map);
 
 
     /* Kwarab marker */
@@ -1494,3 +1522,4 @@ function stopAlarm() {
     alarmSound.pause();
     alarmSound.currentTime = 0;
 }
+
