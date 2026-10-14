@@ -16,6 +16,54 @@
 
     <!-- Main CSS -->
     <link rel="stylesheet" href="style.css">
+
+<style id="safehill-readable-colors">
+/* Accessibility/readability patch: keep original layout, improve contrast */
+body { color: #eaf1f8; }
+p, li, label, small { color: #dbe5ef; }
+h1, h2, h3, h4, h5, h6, strong, b { color: #f8fafc; }
+a { color: #7dd3fc; }
+a:hover { color: #bae6fd; }
+input, select, textarea {
+  color: #f8fafc !important;
+  background-color: #111c2b !important;
+  border-color: #52647a !important;
+}
+input::placeholder, textarea::placeholder { color: #bdc9d7 !important; opacity: 1; }
+button { color: #ffffff; }
+.section-heading p, .hero-content p, .small-text { color: #dbe5ef !important; }
+.dashboard-card, .weather-card, .location-card, .tip-card, .contact-card,
+.current-risk-card, .report-card, .danger-card, .disclaimer-card, .team-card,
+.gallery-card, .weather-item, .location-result, .safety-guidance {
+  color: #eaf1f8;
+}
+.dashboard-card p, .weather-item strong, .weather-item small,
+.location-card p, .location-result p, .danger-info p, .danger-info li,
+.card-content p, .disclaimer-card p, .team-card span {
+  color: #e2eaf3 !important;
+}
+#disasterAwarenessPopup > div {
+  background: #ffffff !important;
+  color: #172033 !important;
+}
+#disasterAwarenessPopup h2 { color: #b91c1c !important; }
+#disasterAwarenessPopup p,
+#disasterAwarenessPopup strong,
+#disasterAwarenessPopup div {
+  color: #1f2937;
+}
+#disasterAwarenessPopup button {
+  background: #0f766e !important;
+  color: #ffffff !important;
+}
+.safety-notice-card, .safety-notice-card h2, .safety-notice-card p {
+  color: #f8fafc;
+}
+@media (prefers-contrast: more) {
+  body, .section, .section p, .dashboard-card, .weather-card { color: #ffffff !important; }
+}
+</style>
+
 </head>
 
 <body>
@@ -1321,7 +1369,7 @@
             बढ़ाना और सही Safety Measures अपनाने में मदद करना है।
         </div>
 
-        <p style="font-size:14px;color:#64748b;">
+        <p style="font-size:14px;color:#475569 !important;">
             स्थानीय प्रशासन, SDRF और आधिकारिक चेतावनियों का पालन करें। यह वेबसाइट जागरूकता के लिए है,
             आधिकारिक आपदा चेतावनी सेवा नहीं। लाइव लोकेशन केवल आपकी अनुमति से इस ब्राउज़र में उपयोग होगी।
         </p>
@@ -1562,6 +1610,232 @@
     if (watchId !== null) navigator.geolocation.clearWatch(watchId);
     if (weatherTimer !== null) clearInterval(weatherTimer);
   });
+})();
+</script>
+
+
+<!-- SafeHill live detector + automatic siren controls -->
+<div id="safehillAlarmPanel" role="region" aria-label="SafeHill लाइव अलर्ट और सायरन">
+  <div class="sh-alarm-heading"><span class="sh-pulse-dot"></span><strong>SafeHill Live Detector</strong></div>
+  <p id="shAlarmStatus" aria-live="polite">अलर्ट सिस्टम तैयार है। अपने ब्राउज़र में ध्वनि की अनुमति चालू करें।</p>
+  <div class="sh-alarm-actions">
+    <button id="shArmAlarm" type="button">🔊 ऑटो सायरन चालू करें</button>
+    <button id="shTestAlarm" type="button">▶ सायरन टेस्ट</button>
+    <button id="shStopAlarm" type="button">🔕 अलार्म बंद</button>
+  </div>
+  <small>मौसम और GPS संकेतों पर आधारित जागरूकता सुविधा — आधिकारिक आपदा चेतावनी नहीं।</small>
+</div>
+<style id="safehill-alarm-styles">
+#safehillAlarmPanel {
+  position: fixed; z-index: 99990; right: 16px; bottom: 16px;
+  width: min(390px, calc(100vw - 32px)); box-sizing: border-box;
+  padding: 16px; border-radius: 16px; color: #f8fafc;
+  background: #111827; border: 1px solid #f59e0b;
+  box-shadow: 0 12px 36px rgba(0,0,0,.35); font-family: inherit;
+}
+#safehillAlarmPanel * { box-sizing: border-box; }
+#safehillAlarmPanel .sh-alarm-heading { display:flex; align-items:center; gap:9px; font-size:15px; color:#fff; }
+#safehillAlarmPanel .sh-pulse-dot { width:10px; height:10px; border-radius:50%; background:#22c55e; flex:none; }
+#safehillAlarmPanel p { color:#e5e7eb !important; font-size:13px; line-height:1.55; margin:9px 0 12px; }
+#safehillAlarmPanel small { display:block; margin-top:10px; color:#cbd5e1 !important; font-size:11px; line-height:1.5; }
+#safehillAlarmPanel .sh-alarm-actions { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+#safehillAlarmPanel button { min-height:42px; padding:9px 10px; border:1px solid #64748b; border-radius:9px; background:#263449; color:#fff !important; font-size:12px; font-weight:700; cursor:pointer; }
+#safehillAlarmPanel #shArmAlarm { grid-column:1/-1; background:#b45309; border-color:#fbbf24; }
+#safehillAlarmPanel button:focus-visible { outline:3px solid #7dd3fc; outline-offset:2px; }
+#safehillAlarmPanel.is-alerting { border-color:#ef4444; box-shadow:0 0 0 2px rgba(239,68,68,.25),0 12px 36px rgba(0,0,0,.4); }
+#safehillAlarmPanel.is-alerting .sh-pulse-dot { background:#ef4444; animation:shAlarmPulse 1s infinite; }
+@keyframes shAlarmPulse { 50% { opacity:.3; transform:scale(.8); } }
+@media (max-width:520px) { #safehillAlarmPanel { right:10px; bottom:10px; width:calc(100vw - 20px); padding:12px; } }
+@media (prefers-reduced-motion:reduce) { #safehillAlarmPanel .sh-pulse-dot { animation:none; } }
+</style>
+<script>
+(function () {
+  "use strict";
+  const panel = document.getElementById("safehillAlarmPanel");
+  if (!panel || panel.dataset.initialized === "1") return;
+  panel.dataset.initialized = "1";
+
+  const statusEl = document.getElementById("shAlarmStatus");
+  const armBtn = document.getElementById("shArmAlarm");
+  const testBtn = document.getElementById("shTestAlarm");
+  const stopBtn = document.getElementById("shStopAlarm");
+
+  let audioContext = null;
+  let armed = false;
+  let active = false;
+  let oscillators = [];
+  let sirenTimer = null;
+  let currentAlertKey = "";
+  let lastAlertAt = 0;
+  let lastCoords = null;
+  let lastWeather = null;
+
+  const KWARAB = { lat: 29.60, lon: 79.53 };
+  const NEARBY_METRES = 1000;
+
+  function status(message) { if (statusEl) statusEl.textContent = message; }
+
+  function distanceMetres(a, b) {
+    const rad = n => n * Math.PI / 180;
+    const dLat = rad(b.lat - a.lat), dLon = rad(b.lon - a.lon);
+    const x = Math.sin(dLat / 2) ** 2 +
+      Math.cos(rad(a.lat)) * Math.cos(rad(b.lat)) * Math.sin(dLon / 2) ** 2;
+    return 6371000 * 2 * Math.atan2(Math.sqrt(x), Math.sqrt(1 - x));
+  }
+
+  async function unlockAudio() {
+    const AC = window.AudioContext || window.webkitAudioContext;
+    if (!AC) {
+      status("इस ब्राउज़र में सायरन ऑडियो उपलब्ध नहीं है।");
+      return false;
+    }
+    try {
+      if (!audioContext) audioContext = new AC();
+      if (audioContext.state === "suspended") await audioContext.resume();
+      return audioContext.state === "running";
+    } catch (e) {
+      status("ध्वनि शुरू नहीं हो सकी। ब्राउज़र की sound permission जाँचें।");
+      return false;
+    }
+  }
+
+  function stopSiren(silentStatus) {
+    active = false;
+    if (sirenTimer) { clearInterval(sirenTimer); sirenTimer = null; }
+    oscillators.forEach(o => {
+      try { o.osc.stop(); } catch (e) {}
+      try { o.osc.disconnect(); o.gain.disconnect(); } catch (e) {}
+    });
+    oscillators = [];
+    panel.classList.remove("is-alerting");
+    if (!silentStatus) status(armed ? "ऑटो सायरन चालू है। अभी कोई सक्रिय अलर्ट नहीं।" : "सायरन बंद है।");
+  }
+
+  async function startSiren(reason, testOnly) {
+    if (active) return;
+    const ready = await unlockAudio();
+    if (!ready) return;
+    active = true;
+    panel.classList.add("is-alerting");
+    status(testOnly ? "सायरन टेस्ट चल रहा है।" : "⚠️ चेतावनी: " + reason);
+
+    // Two-tone electronic siren generated locally; no external audio file/API needed.
+    const osc = audioContext.createOscillator();
+    const gain = audioContext.createGain();
+    osc.type = "sawtooth";
+    osc.frequency.value = 680;
+    gain.gain.value = 0.0001;
+    osc.connect(gain);
+    gain.connect(audioContext.destination);
+    osc.start();
+    oscillators.push({ osc, gain });
+
+    let high = false;
+    const now = audioContext.currentTime;
+    gain.gain.setTargetAtTime(0.13, now, 0.04);
+    sirenTimer = setInterval(() => {
+      if (!audioContext || !active) return;
+      high = !high;
+      const t = audioContext.currentTime;
+      osc.frequency.setTargetAtTime(high ? 920 : 620, t, 0.08);
+    }, 650);
+
+    // Test sound stops automatically; real alert repeats until dismissed.
+    if (testOnly) setTimeout(() => stopSiren(false), 4500);
+  }
+
+  function evaluateAlert() {
+    const reasons = [];
+    if (lastWeather) {
+      const rain = Number(lastWeather.precipitation);
+      const wind = Number(lastWeather.wind_speed_10m);
+      if (Number.isFinite(rain) && rain >= 10) reasons.push("मौजूदा बारिश 10 mm या अधिक");
+      if (Number.isFinite(wind) && wind >= 50) reasons.push("तेज़ हवा 50 km/h या अधिक");
+    }
+    if (lastCoords) {
+      const d = distanceMetres(lastCoords, KWARAB);
+      if (d <= NEARBY_METRES) reasons.push("आप मॉनिटर किए गए Kwarab क्षेत्र से लगभग " + Math.round(d) + " मीटर दूर हैं");
+    }
+    if (!reasons.length) {
+      if (!active) {
+        panel.classList.remove("is-alerting");
+        status(armed ? "🟢 ऑटो डिटेक्टर चालू है। अभी कोई तय अलर्ट ट्रिगर नहीं हुआ।" : "अलर्ट सिस्टम तैयार है। ऑटो सायरन चालू करने के लिए बटन दबाएँ।");
+      }
+      currentAlertKey = "";
+      return;
+    }
+    const key = reasons.join("|");
+    status("⚠️ " + reasons.join(" • "));
+    if (armed && key !== currentAlertKey && !active && Date.now() - lastAlertAt > 30000) {
+      currentAlertKey = key;
+      lastAlertAt = Date.now();
+      startSiren(reasons.join("। "), false);
+    } else if (key !== currentAlertKey) {
+      currentAlertKey = key;
+    }
+  }
+
+  armBtn.addEventListener("click", async function () {
+    const ready = await unlockAudio();
+    if (!ready) return;
+    armed = !armed;
+    armBtn.textContent = armed ? "🟢 ऑटो सायरन चालू है" : "🔊 ऑटो सायरन चालू करें";
+    if (armed) {
+      status("ऑटो सायरन सक्षम है। अब निर्धारित मौसम/GPS संकेत मिलने पर आवाज़ बजेगी।");
+      evaluateAlert();
+    } else {
+      stopSiren(true);
+      status("ऑटो सायरन बंद है।");
+    }
+  });
+
+  testBtn.addEventListener("click", async function () {
+    await startSiren("यह केवल सायरन टेस्ट है", true);
+  });
+  stopBtn.addEventListener("click", function () {
+    stopSiren(true);
+    currentAlertKey = "";
+    status(armed ? "अभी का अलार्म बंद किया गया। नया संकेत मिलने पर फिर बज सकता है।" : "सायरन बंद है।");
+  });
+
+  // Observe the GPS values updated by the live-location feature.
+  const latEl = document.getElementById("userLatitude");
+  const lonEl = document.getElementById("userLongitude");
+  function readLocation() {
+    if (!latEl || !lonEl) return;
+    const lat = Number(latEl.textContent), lon = Number(lonEl.textContent);
+    if (Number.isFinite(lat) && Number.isFinite(lon) &&
+        latEl.textContent.trim() !== "--" && lonEl.textContent.trim() !== "--") {
+      lastCoords = { lat, lon };
+      evaluateAlert();
+    }
+  }
+  if (latEl && lonEl) {
+    new MutationObserver(readLocation).observe(latEl, { childList:true, characterData:true, subtree:true });
+    new MutationObserver(readLocation).observe(lonEl, { childList:true, characterData:true, subtree:true });
+  }
+
+  // Observe the weather dashboard updated by the Open-Meteo integration.
+  const weatherTargets = ["rainfall", "wind"];
+  function readWeather() {
+    const rainText = (document.getElementById("rainfall") || {}).textContent || "";
+    const windText = (document.getElementById("wind") || {}).textContent || "";
+    const rain = Number.parseFloat(rainText);
+    const wind = Number.parseFloat(windText);
+    if (Number.isFinite(rain) || Number.isFinite(wind)) {
+      lastWeather = {
+        precipitation: Number.isFinite(rain) ? rain : null,
+        wind_speed_10m: Number.isFinite(wind) ? wind : null
+      };
+      evaluateAlert();
+    }
+  }
+  weatherTargets.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) new MutationObserver(readWeather).observe(el, { childList:true, characterData:true, subtree:true });
+  });
+
+  status("अलर्ट सिस्टम तैयार है। पहले “ऑटो सायरन चालू करें” दबाएँ; फिर निर्धारित संकेत मिलने पर सायरन अपने-आप बजेगा।");
 })();
 </script>
 
