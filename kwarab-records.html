@@ -10,10 +10,10 @@
 
     <meta
         name="description"
-        content="SafeHill Kwarab Historical Disaster Records and Risk Intelligence Dashboard"
+        content="SafeHill Kwarab live weather, rainfall outlook, local hazard context and historical disaster records for Almora, Uttarakhand."
     >
 
-    <title>SafeHill | Kwarab Disaster Records</title>
+    <title>SafeHill | Kwarab Weather Intelligence & Disaster Records</title>
 
     <style>
 
@@ -1611,7 +1611,496 @@ body.page-fracture{
             }
         }
 
-    </style>
+    
+
+/* =========================================================
+   SAFEHILL PREMIUM UI UPGRADE
+   Refined glass surfaces, clearer hierarchy, responsive polish
+========================================================= */
+:root {
+    --sh-bg: #06111d;
+    --sh-panel: rgba(12, 29, 47, .82);
+    --sh-border: rgba(148, 163, 184, .16);
+    --sh-blue: #38bdf8;
+    --sh-red: #fb5252;
+    --sh-muted: #a8b7c8;
+}
+body {
+    background-color: var(--sh-bg);
+    background-attachment: fixed;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+}
+::selection { background: rgba(56,189,248,.28); color: #fff; }
+::-webkit-scrollbar { width: 10px; }
+::-webkit-scrollbar-track { background: #06111d; }
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(#ef4444, #f97316);
+    border: 2px solid #06111d;
+    border-radius: 20px;
+}
+a, button { -webkit-tap-highlight-color: transparent; }
+a:focus-visible, button:focus-visible, input:focus-visible {
+    outline: 2px solid #7dd3fc;
+    outline-offset: 4px;
+}
+.header {
+    padding-top: 13px;
+    padding-bottom: 13px;
+    background: rgba(3, 10, 19, .82);
+    border-bottom-color: rgba(125,211,252,.13);
+    box-shadow: 0 12px 35px rgba(0,0,0,.12);
+}
+.brand-logo {
+    border: 1px solid rgba(255,255,255,.22);
+    box-shadow: 0 8px 28px rgba(239,68,68,.22), inset 0 1px rgba(255,255,255,.25);
+}
+.brand-text strong { letter-spacing: -.4px; }
+.nav a { font-weight: 650; }
+.nav a:hover { transform: translateY(-1px); }
+.nav .back {
+    box-shadow: inset 0 1px rgba(255,255,255,.06);
+}
+.hero {
+    min-height: 540px;
+    isolation: isolate;
+    border-bottom: 1px solid rgba(125,211,252,.10);
+}
+.hero::after {
+    content: "";
+    position: absolute;
+    inset: auto 0 0;
+    height: 130px;
+    background: linear-gradient(transparent, #06111d);
+    pointer-events: none;
+    z-index: 1;
+}
+.hero-content { max-width: 1000px; }
+.hero h1 { text-wrap: balance; }
+.hero p { max-width: 720px; }
+.location-pill {
+    backdrop-filter: blur(12px);
+    box-shadow: inset 0 1px rgba(255,255,255,.035);
+}
+.container { width: min(1280px, 91%); }
+section { scroll-margin-top: 90px; }
+.section-heading { max-width: 850px; }
+.section-label {
+    padding: 6px 10px;
+    border: 1px solid rgba(96,165,250,.18);
+    border-radius: 999px;
+    background: rgba(56,189,248,.055);
+}
+.section-heading h2 { letter-spacing: -1.1px; text-wrap: balance; }
+.stat, .record-card, .timeline-content, .analysis-card, .response-card,
+.risk-panel, .source-box {
+    backdrop-filter: blur(16px);
+    box-shadow: 0 18px 55px rgba(0,0,0,.16), inset 0 1px rgba(255,255,255,.025);
+}
+.stat { border-color: var(--sh-border); }
+.stat-icon { border: 1px solid rgba(56,189,248,.12); }
+.stat-number { letter-spacing: -1px; }
+.record-card { border-color: var(--sh-border); }
+.record-card::before { width: 3px; opacity: .85; }
+.record-title { letter-spacing: -.45px; text-wrap: balance; }
+.detail { transition: border-color .25s, background .25s; }
+.detail:hover {
+    border-color: rgba(125,211,252,.20);
+    background: rgba(56,189,248,.045);
+}
+.year-btn { min-height: 42px; }
+.year-btn.active {
+    box-shadow: 0 8px 24px rgba(239,68,68,.09), inset 0 1px rgba(255,255,255,.06);
+}
+.gallery-card { isolation: isolate; }
+.gallery-card img { will-change: transform; }
+.gallery-info h3 { text-wrap: balance; }
+table th { position: sticky; top: 0; z-index: 1; }
+tbody tr:nth-child(even) td { background: rgba(255,255,255,.012); }
+footer { position: relative; }
+footer::before {
+    content: "";
+    display: block;
+    width: 64px;
+    height: 3px;
+    margin: 0 auto 24px;
+    border-radius: 99px;
+    background: linear-gradient(90deg, #38bdf8, #ef4444);
+}
+.premium-search-wrap {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0 0 20px;
+    padding: 12px 15px;
+    border: 1px solid rgba(148,163,184,.18);
+    border-radius: 16px;
+    background: rgba(10,25,40,.72);
+    box-shadow: inset 0 1px rgba(255,255,255,.025);
+}
+.premium-search-wrap .search-icon { font-size: 18px; opacity: .8; }
+#recordSearch {
+    width: 100%;
+    border: 0;
+    outline: 0;
+    color: #f8fafc;
+    background: transparent;
+    font: inherit;
+    font-size: 14px;
+}
+#recordSearch::placeholder { color: #71839a; }
+#searchResultCount {
+    white-space: nowrap;
+    color: #7dd3fc;
+    font-size: 12px;
+    font-weight: 800;
+}
+#scrollProgress {
+    position: fixed;
+    z-index: 2000;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #38bdf8, #fb5252, #f97316);
+    box-shadow: 0 0 14px rgba(56,189,248,.3);
+}
+#backToTop {
+    position: fixed;
+    z-index: 1500;
+    right: 22px;
+    bottom: 22px;
+    width: 46px;
+    height: 46px;
+    display: grid;
+    place-items: center;
+    border: 1px solid rgba(125,211,252,.22);
+    border-radius: 15px;
+    color: #e0f2fe;
+    background: rgba(7,20,33,.88);
+    box-shadow: 0 12px 32px rgba(0,0,0,.28);
+    cursor: pointer;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(8px);
+    transition: .25s ease;
+    backdrop-filter: blur(14px);
+}
+#backToTop.visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+#backToTop:hover {
+    border-color: rgba(125,211,252,.5);
+    transform: translateY(-3px);
+}
+.no-records {
+    grid-column: 1 / -1;
+    padding: 28px;
+    text-align: center;
+    color: #94a3b8;
+    border: 1px dashed rgba(148,163,184,.22);
+    border-radius: 18px;
+    background: rgba(15,31,50,.45);
+}
+@media (max-width: 750px) {
+    .header { gap: 12px; }
+    .brand { gap: 9px; }
+    .brand-logo { width: 40px; height: 40px; }
+    .brand-text strong { font-size: 16px; }
+    .brand-text span { font-size: 9px; letter-spacing: .8px; }
+    .nav { gap: 4px; }
+    .nav .back { padding: 8px 10px; font-size: 12px; }
+    .hero { min-height: 450px; }
+    .stats { gap: 12px; }
+    .stat, .record-card, .analysis-card { padding: 22px; }
+    .premium-search-wrap { padding: 11px 12px; }
+    #searchResultCount { font-size: 10px; }
+    #backToTop { right: 14px; bottom: 14px; }
+}
+@media (max-width: 420px) {
+    .brand-text span { display: none; }
+    .nav .back { max-width: 145px; text-align: center; }
+    .hero h1 { font-size: clamp(36px, 11vw, 48px); }
+}
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        scroll-behavior: auto !important;
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+    }
+}
+
+
+/* =========================================================
+   LIVE WEATHER DASHBOARD — PREMIUM FIELD INTELLIGENCE UI
+========================================================= */
+.live-weather-section { position:relative; padding:82px 0; background:linear-gradient(180deg,rgba(7,20,34,.55),rgba(5,15,26,.2)); border-top:1px solid rgba(125,211,252,.08); border-bottom:1px solid rgba(125,211,252,.08); }
+.weather-topline { display:flex; justify-content:space-between; align-items:center; gap:18px; margin:0 0 20px; padding:18px 21px; border:1px solid rgba(125,211,252,.16); border-radius:18px; background:rgba(10,25,40,.72); }
+.weather-place { font-weight:850; font-size:16px; }
+.weather-coords { color:#8296ab; font-size:12px; margin-top:3px; }
+.weather-status { display:inline-flex; align-items:center; gap:8px; color:#a7f3d0; font-size:12px; font-weight:800; padding:8px 12px; border-radius:99px; border:1px solid rgba(52,211,153,.2); background:rgba(16,185,129,.07); }
+.live-dot,.risk-badge-dot { width:8px;height:8px;display:inline-block;border-radius:50%;background:#34d399;box-shadow:0 0 12px rgba(52,211,153,.7); }
+.weather-main-grid { display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:15px; }
+.weather-hero-card,.weather-metric-card,.weather-panel { border:1px solid rgba(148,163,184,.15);border-radius:22px;background:linear-gradient(145deg,rgba(15,34,54,.92),rgba(7,20,34,.92));box-shadow:0 20px 55px rgba(0,0,0,.17),inset 0 1px rgba(255,255,255,.025); }
+.weather-hero-card { grid-column:span 2;grid-row:span 2;padding:27px;min-height:230px; }
+.weather-card-label,.panel-kicker { color:#7dd3fc;font-size:10px;font-weight:900;letter-spacing:1.6px; }
+.weather-current-row { display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:19px; }
+.weather-big-icon { font-size:52px;line-height:1.1;filter:drop-shadow(0 8px 18px rgba(56,189,248,.12)); }
+.weather-description { margin-top:8px;font-weight:750;font-size:15px; }
+.weather-temperature { font-size:clamp(48px,6vw,70px);font-weight:900;letter-spacing:-4px;line-height:1; }
+.weather-temperature sup { font-size:23px;letter-spacing:0;vertical-align:top;margin-left:3px;color:#7dd3fc; }
+.weather-feels { margin-top:13px;color:#8fa2b8;font-size:13px; }
+.weather-feels strong { color:#dbeafe; }
+.weather-updated { margin-top:22px;padding-top:13px;border-top:1px solid rgba(148,163,184,.12);font-size:11px;color:#8296ab; }
+.weather-updated strong { color:#cbd5e1;font-weight:700; }
+.weather-metric-card { padding:20px;min-height:105px;display:grid;grid-template-columns:auto 1fr;align-content:center;column-gap:11px; }
+.metric-icon { grid-row:span 2;font-size:24px;align-self:center; }
+.metric-label { color:#8fa2b8;font-size:12px;font-weight:700; }
+.weather-metric-card strong { margin-top:4px;font-size:26px;letter-spacing:-.8px; }
+.weather-metric-card strong small { font-size:11px;color:#8296ab;letter-spacing:0;margin-left:4px; }
+.weather-metric-card p { grid-column:1/-1;color:#71869d;font-size:11px;margin-top:12px; }
+.rainfall-grid { display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px; }
+.weather-panel { padding:24px; }
+.weather-panel-heading { display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:20px; }
+.weather-panel-heading h3 { font-size:21px;letter-spacing:-.5px;margin-top:5px; }
+.panel-weather-icon { width:42px;height:42px;display:grid;place-items:center;border-radius:14px;background:rgba(56,189,248,.08);border:1px solid rgba(56,189,248,.12);font-size:21px; }
+.rain-total { display:flex;align-items:baseline;gap:10px; }
+.rain-total strong { font-size:40px;letter-spacing:-1.5px; }
+.rain-total span { color:#91a4b8;font-size:12px; }
+.rain-track { height:8px;border-radius:99px;background:rgba(148,163,184,.13);margin-top:16px;overflow:hidden; }
+.rain-track span { display:block;width:0;height:100%;border-radius:99px;background:linear-gradient(90deg,#38bdf8,#facc15,#fb5252);transition:width .5s ease; }
+.weather-note { margin-top:14px;color:#a7b6c7;font-size:13px;line-height:1.7; }
+.weather-disclaimer { margin-top:12px;color:#647b92;font-size:10px; }
+.weather-risk-badge { display:inline-flex;align-items:center;gap:9px;padding:10px 13px;border-radius:12px;font-weight:850;font-size:12px;border:1px solid rgba(148,163,184,.16);background:rgba(148,163,184,.06); }
+.weather-risk-badge.watch { color:#fde68a;border-color:rgba(250,204,21,.22);background:rgba(234,179,8,.08); }
+.weather-risk-badge.watch .risk-badge-dot { background:#facc15;box-shadow:0 0 12px rgba(250,204,21,.6); }
+.weather-risk-badge.caution { color:#fdba74;border-color:rgba(249,115,22,.25);background:rgba(249,115,22,.08); }
+.weather-risk-badge.caution .risk-badge-dot { background:#fb923c;box-shadow:0 0 12px rgba(249,115,22,.6); }
+.weather-risk-badge.high { color:#fca5a5;border-color:rgba(239,68,68,.28);background:rgba(239,68,68,.09); }
+.weather-risk-badge.high .risk-badge-dot { background:#f87171;box-shadow:0 0 12px rgba(239,68,68,.6); }
+.weather-risk-badge.neutral { color:#bfdbfe; }
+.weather-mini-stats { display:flex;justify-content:space-between;gap:12px;padding:13px 0 0;margin-top:13px;border-top:1px solid rgba(148,163,184,.1);font-size:12px;color:#8296ab; }
+.weather-mini-stats strong { color:#e2e8f0;text-align:right; }
+.hourly-panel { margin-top:16px; }
+.hourly-forecast { display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px; }
+.hour-card { min-width:0;text-align:center;padding:15px 8px;border-radius:15px;background:rgba(255,255,255,.025);border:1px solid rgba(148,163,184,.10); }
+.hour-card time { color:#8296ab;font-size:11px; }
+.hour-card .hour-icon { font-size:22px;margin:11px 0 7px; }
+.hour-card strong { display:block;font-size:17px; }
+.hour-card .hour-rain { margin-top:8px;color:#7dd3fc;font-size:11px; }
+.hour-card .hour-wind { margin-top:5px;color:#8296ab;font-size:10px; }
+.hourly-loading { grid-column:1/-1;color:#8296ab;font-size:13px;padding:10px 0; }
+.weather-source-line { display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-top:17px;color:#71869d;font-size:11px; }
+.weather-source-line a { color:#7dd3fc;text-decoration:none;font-weight:800; }
+.weather-refresh { cursor:pointer;color:#cfeeff;border:1px solid rgba(125,211,252,.2);border-radius:10px;background:rgba(56,189,248,.07);padding:9px 12px;font:inherit;font-weight:800; }
+.weather-refresh:hover { background:rgba(56,189,248,.14); }
+.weather-safety-note { margin-top:18px;padding:16px 18px;border-radius:15px;background:rgba(234,179,8,.055);border:1px solid rgba(250,204,21,.15);color:#b7c2ce;font-size:12px;line-height:1.7; }
+.weather-safety-note strong { color:#fde68a; }
+@media(max-width:900px) {
+ .weather-main-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+ .weather-hero-card { grid-column:span 2;grid-row:auto; }
+ .hourly-forecast { grid-template-columns:repeat(3,minmax(0,1fr)); }
+}
+@media(max-width:600px) {
+ .live-weather-section { padding:60px 0; }
+ .weather-topline { align-items:flex-start;flex-direction:column; }
+ .weather-main-grid,.rainfall-grid { grid-template-columns:1fr; }
+ .weather-hero-card { grid-column:auto;padding:22px; }
+ .weather-metric-card { min-height:100px; }
+ .weather-panel { padding:19px; }
+ .hourly-forecast { grid-template-columns:repeat(2,minmax(0,1fr)); }
+ .weather-temperature { font-size:55px; }
+}
+
+
+/* Kwarab area profile */
+#kwarab-profile { padding:82px 0; }
+.kwarab-profile-grid { display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:15px; }
+.kwarab-profile-card { padding:24px;border:1px solid rgba(148,163,184,.14);border-radius:20px;background:linear-gradient(145deg,rgba(15,34,54,.82),rgba(7,20,34,.78));box-shadow:0 18px 48px rgba(0,0,0,.13); }
+.profile-icon { width:46px;height:46px;display:grid;place-items:center;border-radius:14px;background:rgba(56,189,248,.09);border:1px solid rgba(56,189,248,.13);font-size:23px;margin-bottom:18px; }
+.profile-kicker { color:#7dd3fc;font-size:10px;font-weight:900;letter-spacing:1.4px; }
+.kwarab-profile-card h3 { margin-top:8px;font-size:19px;letter-spacing:-.4px; }
+.kwarab-profile-card p { margin-top:10px;color:#94a8bc;font-size:13px;line-height:1.8; }
+.travel-checklist { display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px;margin-top:18px; }
+.travel-checklist>div { display:flex;gap:13px;padding:19px;border-radius:17px;border:1px solid rgba(148,163,184,.12);background:rgba(255,255,255,.025); }
+.checklist-number { flex:0 0 35px;width:35px;height:35px;display:grid;place-items:center;border-radius:11px;color:#7dd3fc;background:rgba(56,189,248,.08);font-size:12px;font-weight:900; }
+.travel-checklist strong { font-size:13px; }
+.travel-checklist p { color:#8da0b4;font-size:12px;line-height:1.65;margin-top:5px; }
+.profile-source-note { margin-top:18px;color:#647b92;font-size:11px;line-height:1.7; }
+@media(max-width:1000px) { .kwarab-profile-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+@media(max-width:650px) { #kwarab-profile { padding:60px 0; } .kwarab-profile-grid,.travel-checklist { grid-template-columns:1fr; } }
+
+
+/* =========================================================
+   SAFEHILL SIGNATURE WEATHER DASHBOARD — PREMIUM REDESIGN
+========================================================= */
+.live-weather-section {
+  padding: 94px 0 88px;
+  background:
+    radial-gradient(ellipse at 8% 4%, rgba(56,189,248,.09), transparent 38%),
+    radial-gradient(ellipse at 94% 20%, rgba(239,68,68,.07), transparent 34%),
+    linear-gradient(180deg, rgba(5,15,27,.96), rgba(7,20,34,.76));
+}
+.live-weather-section .section-heading { margin-bottom: 34px; }
+.live-weather-section .section-heading h2 {
+  font-size: clamp(32px, 4.4vw, 52px);
+  letter-spacing: -1.8px;
+}
+.live-weather-section .section-heading p { max-width: 720px; }
+.weather-topline {
+  position: relative;
+  overflow: hidden;
+  padding: 20px 23px;
+  border-radius: 22px;
+  border: 1px solid rgba(125,211,252,.17);
+  background: linear-gradient(110deg, rgba(12,32,52,.96), rgba(8,22,38,.86));
+  box-shadow: 0 22px 55px rgba(0,0,0,.22), inset 0 1px rgba(255,255,255,.045);
+}
+.weather-topline::after {
+  content:"";
+  position:absolute; right:-50px; top:-100px;
+  width:230px; height:230px; border-radius:50%;
+  background:radial-gradient(circle,rgba(56,189,248,.12),transparent 68%);
+  pointer-events:none;
+}
+.weather-place { font-size:17px; letter-spacing:-.25px; }
+.weather-coords { letter-spacing:.15px; }
+.weather-status { position:relative; z-index:1; box-shadow:inset 0 1px rgba(255,255,255,.04); }
+.weather-main-grid {
+  grid-template-columns: repeat(4,minmax(0,1fr));
+  gap:16px;
+  align-items:stretch;
+}
+.weather-hero-card {
+  position:relative;
+  isolation:isolate;
+  overflow:hidden;
+  min-height:290px;
+  padding:29px;
+  border-color:rgba(125,211,252,.22);
+  background:
+    radial-gradient(ellipse at 82% 24%,rgba(56,189,248,.16),transparent 36%),
+    linear-gradient(145deg,rgba(16,43,67,.98),rgba(7,20,35,.98));
+  box-shadow:0 26px 70px rgba(0,0,0,.27),inset 0 1px rgba(255,255,255,.07);
+}
+.weather-hero-card::before {
+  content:"";
+  position:absolute;
+  z-index:-1;
+  width:210px;height:210px;right:-70px;top:48px;border-radius:50%;
+  border:1px solid rgba(125,211,252,.09);
+  box-shadow:0 0 0 25px rgba(125,211,252,.018),0 0 0 52px rgba(125,211,252,.012);
+}
+.weather-card-label { display:flex;align-items:center;gap:9px; }
+.weather-card-label::before { content:"";width:7px;height:7px;border-radius:50%;background:#38bdf8;box-shadow:0 0 13px #38bdf8; }
+.weather-current-row { min-height:135px; margin-top:24px; }
+.weather-big-icon { font-size:64px;filter:drop-shadow(0 8px 25px rgba(56,189,248,.25)); }
+.weather-description { font-size:16px; }
+.weather-temperature { font-size:clamp(58px,6.4vw,82px);letter-spacing:-5px;text-shadow:0 8px 30px rgba(0,0,0,.18); }
+.weather-temperature sup { color:#bae6fd;font-size:24px; }
+.weather-feels { margin-top:5px; }
+.weather-updated { margin-top:26px; }
+.weather-metric-card {
+  position:relative;
+  overflow:hidden;
+  min-height:136px;
+  padding:21px;
+  grid-template-columns:1fr auto;
+  align-content:start;
+  column-gap:8px;
+  border-radius:20px;
+  background:linear-gradient(145deg,rgba(15,34,54,.93),rgba(8,21,35,.93));
+  transition:transform .25s ease,border-color .25s ease,box-shadow .25s ease;
+}
+.weather-metric-card:hover { transform:translateY(-4px);border-color:rgba(125,211,252,.28);box-shadow:0 22px 50px rgba(0,0,0,.2); }
+.weather-metric-card .metric-icon {
+  grid-row:auto;grid-column:2;grid-row:1;
+  width:40px;height:40px;display:grid;place-items:center;
+  border-radius:13px;background:rgba(56,189,248,.09);
+  border:1px solid rgba(56,189,248,.13);font-size:21px;
+}
+.weather-metric-card .metric-label { grid-column:1;grid-row:1;align-self:center;font-size:12px; }
+.weather-metric-card strong { grid-column:1/-1;grid-row:2;font-size:35px;margin-top:18px;letter-spacing:-1.5px; }
+.weather-metric-card p { grid-column:1/-1;margin-top:6px;font-size:11px; }
+.rainfall-grid { gap:16px;margin-top:16px; }
+.weather-panel {
+  padding:27px;
+  border-radius:22px;
+  background:linear-gradient(145deg,rgba(13,31,50,.94),rgba(7,19,32,.94));
+  box-shadow:0 20px 55px rgba(0,0,0,.17),inset 0 1px rgba(255,255,255,.035);
+}
+.weather-panel-heading { margin-bottom:24px; }
+.weather-panel-heading h3 { font-size:23px;letter-spacing:-.7px; }
+.panel-weather-icon { width:46px;height:46px;border-radius:15px;background:linear-gradient(145deg,rgba(56,189,248,.13),rgba(56,189,248,.035)); }
+.rain-total { align-items:center;gap:12px; }
+.rain-total strong { font-size:49px;letter-spacing:-2px; }
+.rain-total span { max-width:145px;line-height:1.45; }
+.rain-track { height:10px;background:rgba(148,163,184,.11);box-shadow:inset 0 1px 3px rgba(0,0,0,.22); }
+.rain-track span { box-shadow:0 0 16px rgba(56,189,248,.22); }
+.weather-risk-badge { padding:11px 14px;border-radius:13px;letter-spacing:.1px; }
+.weather-mini-stats { padding-top:15px;margin-top:15px; }
+.hourly-panel { margin-top:16px; }
+.hourly-forecast { gap:12px; }
+.hour-card {
+  padding:18px 10px;
+  border-radius:17px;
+  background:linear-gradient(180deg,rgba(255,255,255,.035),rgba(255,255,255,.012));
+  border-color:rgba(148,163,184,.13);
+  transition:transform .2s ease,border-color .2s ease;
+}
+.hour-card:hover { transform:translateY(-3px);border-color:rgba(125,211,252,.25); }
+.hour-card time { font-weight:750; }
+.hour-card .hour-icon { font-size:26px;margin:14px 0 10px; }
+.hour-card strong { font-size:22px;letter-spacing:-.5px; }
+.hour-card .hour-rain { margin-top:11px;font-weight:750; }
+.weather-source-line { margin-top:20px; }
+.weather-refresh { min-height:40px;padding:10px 15px;transition:.2s ease; }
+.weather-refresh:hover { transform:translateY(-1px); }
+.weather-safety-note { padding:17px 20px;border-radius:17px;background:linear-gradient(110deg,rgba(234,179,8,.065),rgba(234,179,8,.025)); }
+@media(max-width:1000px) {
+  .weather-main-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .weather-hero-card { grid-column:span 2;grid-row:auto; }
+}
+@media(max-width:600px) {
+  .live-weather-section { padding:64px 0; }
+  .weather-hero-card { min-height:260px;padding:22px; }
+  .weather-current-row { min-height:120px; }
+  .weather-big-icon { font-size:51px; }
+  .weather-temperature { font-size:59px; }
+  .weather-metric-card { min-height:125px;padding:17px; }
+  .weather-metric-card strong { font-size:31px; }
+  .weather-panel { padding:21px; }
+}
+
+
+.weather-dashboard-ribbon {
+  display:flex;align-items:center;justify-content:space-between;gap:18px;
+  margin-bottom:20px;padding:16px 20px;border-radius:19px;
+  background:rgba(3,12,22,.62);border:1px solid rgba(148,163,184,.12);
+}
+.ribbon-brand { display:flex;align-items:center;gap:12px; }
+.ribbon-brand-icon {
+  display:grid;place-items:center;width:43px;height:43px;border-radius:14px;
+  font-size:24px;color:#bae6fd;background:linear-gradient(145deg,rgba(56,189,248,.18),rgba(56,189,248,.04));
+  border:1px solid rgba(125,211,252,.22);
+}
+.ribbon-brand strong { display:block;font-size:12px;letter-spacing:1.2px; }
+.ribbon-brand strong span { color:#7dd3fc; }
+.ribbon-brand small { display:block;margin-top:4px;color:#70869d;font-size:9px;letter-spacing:1.1px; }
+.ribbon-meta { display:flex;align-items:center;gap:13px; }
+.ribbon-live { display:inline-flex;align-items:center;gap:7px;color:#a7f3d0;font-size:10px;font-weight:900;letter-spacing:1px; }
+.ribbon-live i { width:7px;height:7px;border-radius:50%;background:#34d399;box-shadow:0 0 12px rgba(52,211,153,.8); }
+.ribbon-separator { width:1px;height:23px;background:rgba(148,163,184,.16); }
+.ribbon-refresh-label { color:#70869d;font-size:11px; }
+@media(max-width:650px) {
+ .weather-dashboard-ribbon { align-items:flex-start;flex-direction:column;padding:15px; }
+ .ribbon-meta { width:100%;justify-content:space-between; }
+}
+
+</style>
 
 <link rel="preload" as="image" href="qurab4.jpeg">
 <link rel="preload" as="image" href="quarab2.jpeg">
@@ -1621,6 +2110,73 @@ body.page-fracture{
 
 
 <body>
+
+<!-- Hindi disaster safety notice shown on first page entry -->
+<div id="safetyNotice" class="safety-notice-overlay" role="dialog" aria-modal="true"
+     aria-labelledby="safetyNoticeTitle" aria-describedby="safetyNoticeText">
+  <div class="safety-notice-card">
+    <div class="safety-notice-symbol" aria-hidden="true">⚠️</div>
+    <p class="safety-notice-kicker">SAFEHILL • सुरक्षा सूचना</p>
+    <h2 id="safetyNoticeTitle">आपदा को हम रोक नहीं सकते, लेकिन सतर्क रहकर नुकसान कम कर सकते हैं।</h2>
+    <p id="safetyNoticeText">
+      अपनी और अपने परिवार की सुरक्षा को प्राथमिकता दें। भारी बारिश, भूस्खलन या अचानक बाढ़ के संकेत मिलने पर
+      खतरे वाले क्षेत्र से दूर रहें और प्रशासन द्वारा जारी निर्देशों का पालन करें।
+    </p>
+    <p class="safety-notice-small">
+      यह वेबसाइट जागरूकता और जानकारी के लिए है। यह आधिकारिक चेतावनी सेवा नहीं है।
+      आपात स्थिति में स्थानीय प्रशासन की सलाह मानें।
+    </p>
+    <button id="safetyNoticeOk" class="safety-notice-ok" type="button">ठीक है, समझ गया</button>
+  </div>
+</div>
+<style>
+  .safety-notice-overlay {
+    position: fixed; inset: 0; z-index: 99999;
+    display: flex; align-items: center; justify-content: center;
+    padding: 20px; background: rgba(3, 8, 15, .88);
+    backdrop-filter: blur(10px);
+  }
+  .safety-notice-overlay[hidden] { display: none !important; }
+  .safety-notice-card {
+    width: min(100%, 560px); padding: clamp(24px, 5vw, 38px);
+    border: 1px solid rgba(255, 190, 80, .42); border-radius: 22px;
+    background: linear-gradient(145deg, #142131, #09111c);
+    color: #f7f9fc; text-align: center;
+    box-shadow: 0 24px 90px rgba(0,0,0,.55);
+    font-family: inherit; animation: safetyNoticeIn .35s ease-out both;
+  }
+  .safety-notice-symbol { font-size: 42px; line-height: 1.2; margin-bottom: 10px; }
+  .safety-notice-kicker { margin: 0 0 12px; color: #ffc56c; font-size: 12px; font-weight: 800; letter-spacing: 2px; }
+  .safety-notice-card h2 { margin: 0 0 14px; font-size: clamp(21px, 4vw, 29px); line-height: 1.45; }
+  .safety-notice-card p { line-height: 1.8; }
+  .safety-notice-card #safetyNoticeText { margin: 0 0 12px; color: #e0e8f1; font-size: 15px; }
+  .safety-notice-small { margin: 0 0 22px; color: #aab9ca; font-size: 12px; }
+  .safety-notice-ok {
+    min-height: 48px; width: 100%; border: 0; border-radius: 12px;
+    padding: 12px 18px; background: #f4b84c; color: #17202b;
+    font-size: 16px; font-weight: 800; cursor: pointer;
+    transition: transform .18s ease, filter .18s ease;
+  }
+  .safety-notice-ok:hover { filter: brightness(1.06); transform: translateY(-1px); }
+  .safety-notice-ok:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
+  @keyframes safetyNoticeIn { from { opacity: 0; transform: translateY(12px) scale(.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
+  @media (prefers-reduced-motion: reduce) { .safety-notice-card { animation: none; } }
+</style>
+<script>
+(function () {
+  const overlay = document.getElementById('safetyNotice');
+  const okButton = document.getElementById('safetyNoticeOk');
+  if (!overlay || !okButton) return;
+  document.body.style.overflow = 'hidden';
+  okButton.focus();
+  okButton.addEventListener('click', function () {
+    overlay.hidden = true;
+    document.body.style.overflow = '';
+  });
+})();
+</script>
+
+
 
 <!-- REALISTIC PAGE FRACTURE OVERLAY -->
 <div class="screen-crack" id="screenCrack" aria-hidden="true">
@@ -1705,7 +2261,7 @@ body.page-fracture{
             Live Map
         </a>
 
-        <a href="index.html#weather">
+        <a href="#live-weather">
             Weather
         </a>
 
@@ -1784,6 +2340,152 @@ body.page-fracture{
     </div>
 
 </section>
+
+
+<!-- =========================================================
+     LIVE KWARAB WEATHER & RAINFALL WATCH
+========================================================= -->
+<section id="live-weather" class="live-weather-section">
+  <div class="container">
+    
+<div class="weather-dashboard-ribbon" aria-label="Weather dashboard overview">
+  <div class="ribbon-brand">
+    <span class="ribbon-brand-icon">◈</span>
+    <div><strong>SAFEHILL <span>WEATHER INTELLIGENCE</span></strong><small>KWARAB MONITORING AREA · UTTARAKHAND</small></div>
+  </div>
+  <div class="ribbon-meta">
+    <span class="ribbon-live"><i></i> LIVE FORECAST</span>
+    <span class="ribbon-separator"></span>
+    <span class="ribbon-refresh-label">Auto-refresh · 10 min</span>
+  </div>
+</div>
+
+    <div class="section-heading">
+      <span class="section-label">LIVE WEATHER INTELLIGENCE</span>
+      <h2>🌦️ Kwarab Live Weather & Rainfall Watch</h2>
+      <p>Live model-based weather for the Kwarab area, refreshed automatically. Rainfall and weather conditions can inform preparedness, but they do not confirm a landslide or replace official warnings.</p>
+    </div>
+
+    <div class="weather-topline">
+      <div>
+        <div class="weather-place">📍 Kwarab, Almora, Uttarakhand</div>
+        <div class="weather-coords">Approximate area coordinates · 29.65° N, 79.65° E</div>
+      </div>
+      <div class="weather-status"><span class="live-dot"></span><span id="weatherStatus">Connecting to weather service…</span></div>
+    </div>
+
+    <div class="weather-main-grid">
+      <article class="weather-hero-card">
+        <div class="weather-card-label">CURRENT CONDITIONS</div>
+        <div class="weather-current-row">
+          <div>
+            <div id="weatherIcon" class="weather-big-icon">🌤️</div>
+            <div id="weatherDescription" class="weather-description">Loading weather…</div>
+          </div>
+          <div class="weather-temperature"><span id="currentTemp">--</span><sup>°C</sup></div>
+        </div>
+        <div class="weather-feels">Feels like <strong id="feelsLike">--°C</strong></div>
+        <div class="weather-updated">Last updated: <strong id="weatherUpdated">Waiting for data</strong></div>
+      </article>
+
+      <article class="weather-metric-card">
+        <span class="metric-icon">🌧️</span><span class="metric-label">Current Rain</span>
+        <strong><span id="currentRain">--</span> <small>mm</small></strong>
+        <p>Rain at the latest model time</p>
+      </article>
+      <article class="weather-metric-card">
+        <span class="metric-icon">💧</span><span class="metric-label">Humidity</span>
+        <strong><span id="currentHumidity">--</span><small>%</small></strong>
+        <p>Relative humidity</p>
+      </article>
+      <article class="weather-metric-card">
+        <span class="metric-icon">💨</span><span class="metric-label">Wind Speed</span>
+        <strong><span id="currentWind">--</span><small>km/h</small></strong>
+        <p>Wind at 10 metres</p>
+      </article>
+      <article class="weather-metric-card">
+        <span class="metric-icon">🌬️</span><span class="metric-label">Wind Gust</span>
+        <strong><span id="currentGust">--</span><small>km/h</small></strong>
+        <p>Maximum gust estimate</p>
+      </article>
+    </div>
+
+    <div class="rainfall-grid">
+      <article class="weather-panel">
+        <div class="weather-panel-heading"><div><span class="panel-kicker">NEXT 6 HOURS</span><h3>Rainfall Outlook</h3></div><span class="panel-weather-icon">📈</span></div>
+        <div class="rain-total"><strong id="nextSixRain">--</strong><span>mm forecast precipitation</span></div>
+        <div class="rain-track"><span id="rainProgress"></span></div>
+        <p id="rainSummary" class="weather-note">Forecast data will appear here.</p>
+        <p class="weather-disclaimer">Forecast precipitation is not a measured rain gauge reading.</p>
+      </article>
+
+      <article class="weather-panel">
+        <div class="weather-panel-heading"><div><span class="panel-kicker">PREPAREDNESS INDICATOR</span><h3>Weather Watch</h3></div><span class="panel-weather-icon">🛡️</span></div>
+        <div id="weatherRiskBadge" class="weather-risk-badge neutral"><span class="risk-badge-dot"></span><span id="weatherRiskTitle">Awaiting data</span></div>
+        <p id="weatherRiskText" class="weather-note">This indicator is based on forecast rainfall and wind only; it is not an official landslide risk forecast.</p>
+        <div class="weather-mini-stats"><span>Next 24h precipitation</span><strong id="nextDayRain">-- mm</strong></div>
+        <div class="weather-mini-stats"><span>Forecast high / low</span><strong id="dailyRange">-- / -- °C</strong></div>
+      </article>
+    </div>
+
+    <article class="weather-panel hourly-panel">
+      <div class="weather-panel-heading"><div><span class="panel-kicker">SHORT-TERM FORECAST</span><h3>Upcoming Hours</h3></div><span class="panel-weather-icon">🕒</span></div>
+      <div id="hourlyForecast" class="hourly-forecast"><div class="hourly-loading">Loading hourly forecast…</div></div>
+    </article>
+
+    <div class="weather-source-line">
+      <span>Data provider: <a href="https://open-meteo.com/" target="_blank" rel="noopener noreferrer">Open-Meteo</a></span>
+      <span id="weatherDataTime">Forecast timestamps use local India time.</span>
+      <button type="button" id="refreshWeather" class="weather-refresh">↻ Refresh weather</button>
+    </div>
+    <div class="weather-safety-note"><strong>⚠️ Safety note:</strong> This is a public weather-data dashboard, not an official warning system. Mountain weather can vary sharply over short distances. For road closures, evacuation instructions and official alerts, follow district administration, police and disaster-management authorities.</div>
+  </div>
+</section>
+
+
+
+<!-- =========================================================
+     KWARAB AREA PROFILE & TRAVEL PREPAREDNESS
+========================================================= -->
+<section id="kwarab-profile">
+  <div class="container">
+    <div class="section-heading">
+      <span class="section-label">LOCAL AREA PROFILE</span>
+      <h2>🏔️ Understanding the Kwarab Stretch</h2>
+      <p>A practical overview of why this mountain-road corridor deserves attention and what travellers should check before and during their journey.</p>
+    </div>
+    <div class="kwarab-profile-grid">
+      <article class="kwarab-profile-card">
+        <div class="profile-icon">📍</div><span class="profile-kicker">LOCATION</span>
+        <h3>Kwarab, Almora</h3>
+        <p>A Himalayan road corridor in Almora district, Uttarakhand, connecting routes used by local residents and travellers. The map pin and coordinates on this page are approximate area references.</p>
+      </article>
+      <article class="kwarab-profile-card">
+        <div class="profile-icon">⛰️</div><span class="profile-kicker">TERRAIN</span>
+        <h3>Steep slopes & runoff</h3>
+        <p>Mountain roads can be exposed to slope erosion, falling rocks, drainage overflow and local ground movement. Conditions can differ over short distances and may change quickly during rain.</p>
+      </article>
+      <article class="kwarab-profile-card">
+        <div class="profile-icon">🌧️</div><span class="profile-kicker">WEATHER FACTORS</span>
+        <h3>Rainfall matters</h3>
+        <p>Persistent or intense rain can saturate soil, increase surface runoff and contribute to instability on susceptible slopes. Forecast values are regional model estimates, not on-site measurements.</p>
+      </article>
+      <article class="kwarab-profile-card">
+        <div class="profile-icon">🚧</div><span class="profile-kicker">ROAD SAFETY</span>
+        <h3>Check before travel</h3>
+        <p>Look for official traffic advisories and closures. Never assume a road is safe because the weather card shows low rainfall, and do not stop beside fresh cracks, falling stones or an unstable cut slope.</p>
+      </article>
+    </div>
+    <div class="travel-checklist">
+      <div><span class="checklist-number">01</span><div><strong>Before departure</strong><p>Check the latest forecast and official district/police road updates.</p></div></div>
+      <div><span class="checklist-number">02</span><div><strong>During rainfall</strong><p>Reduce speed, keep distance from heavy vehicles and avoid unnecessary stops under steep slopes.</p></div></div>
+      <div><span class="checklist-number">03</span><div><strong>If danger signs appear</strong><p>Do not cross debris or flowing water. Move away from the slope if safe and follow official instructions.</p></div></div>
+    </div>
+    <p class="profile-source-note">Historical incident cards on this page are project records and must be independently verified before being treated as official incident statistics. This profile does not claim to provide a certified geological assessment.</p>
+  </div>
+</section>
+
+
 
 
 
@@ -3170,15 +3872,7 @@ body.page-fracture{
 
     setInterval(createDebris, 260);
 
-    /* Occasional cinematic warning shake */
-    function disasterPulse(){
-        document.body.classList.add("disaster-shake");
-        setTimeout(() => {
-            document.body.classList.remove("disaster-shake");
-        }, 750);
-    }
-
-    setInterval(disasterPulse, 11000);
+    /* Repeated background shaking disabled: keep the page stable. */
 
     /* Make high-risk cards pulse subtly */
     document.querySelectorAll(".risk.high, .risk.critical")
@@ -3190,22 +3884,20 @@ body.page-fracture{
 
 
 /* =========================================================
-   REALISTIC PAGE FRACTURE CONTROLLER
-   Crack appears for ~2.8 seconds, then disappears.
+   ONE-TIME PAGE FRACTURE EFFECT
+   Plays once per page load; no recurring crack or shake.
 ========================================================= */
 (function(){
 
     const crack = document.getElementById("screenCrack");
     if(!crack) return;
 
-    let running = false;
+    let hasPlayed = false;
 
     function triggerPageFracture(){
-        if(running) return;
+        if(hasPlayed) return;
+        hasPlayed = true;
 
-        running = true;
-
-        /* restart SVG animations every time */
         crack.classList.remove("active");
         void crack.offsetWidth;
         crack.classList.add("active");
@@ -3218,44 +3910,290 @@ body.page-fracture{
 
         setTimeout(() => {
             crack.classList.remove("active");
-            running = false;
         }, 3000);
     }
 
-    /*
-       Random disaster event:
-       first event after 7–10 sec,
-       then every 9–15 sec.
-    */
-    function scheduleNext(){
-        const delay = 7000 + Math.random() * 3500;
+    /* One automatic effect shortly after page load. */
+    setTimeout(triggerPageFracture, 8000);
 
-        setTimeout(() => {
-            triggerPageFracture();
-
-            setTimeout(
-                scheduleNext,
-                9000 + Math.random() * 6000
-            );
-
-        }, delay);
-    }
-
-    /* Start automatically */
-    scheduleNext();
-
-    /*
-       Also trigger when user clicks the broken warning icon.
-    */
+    /* The warning icon can trigger it early, but never a second time. */
     const warning = document.querySelector(".break-warning");
-
     if(warning){
         warning.style.cursor = "pointer";
-        warning.title = "Simulate disaster impact";
-
+        warning.title = "Play the one-time impact effect";
         warning.addEventListener("click", triggerPageFracture);
     }
 
+})();
+
+
+/* =========================================================
+   PREMIUM QUALITY-OF-LIFE CONTROLS
+========================================================= */
+(function () {
+    // Reading progress indicator
+    const progress = document.createElement("div");
+    progress.id = "scrollProgress";
+    progress.setAttribute("aria-hidden", "true");
+    document.body.appendChild(progress);
+
+    const topButton = document.createElement("button");
+    topButton.id = "backToTop";
+    topButton.type = "button";
+    topButton.setAttribute("aria-label", "Back to top");
+    topButton.title = "Back to top";
+    topButton.textContent = "↑";
+    document.body.appendChild(topButton);
+
+    function updateScrollUI() {
+        const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+        const percent = maxScroll > 0 ? (window.scrollY / maxScroll) * 100 : 0;
+        progress.style.width = percent + "%";
+        topButton.classList.toggle("visible", window.scrollY > 420);
+    }
+    window.addEventListener("scroll", updateScrollUI, { passive: true });
+    window.addEventListener("resize", updateScrollUI);
+    updateScrollUI();
+
+    topButton.addEventListener("click", function () {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+
+    // Search historical incident cards without changing the year filter.
+    const grid = document.querySelector(".records-grid");
+    const yearFilter = document.querySelector(".year-filter");
+    const cards = Array.from(document.querySelectorAll(".record-card"));
+    if (grid && yearFilter && cards.length) {
+        const wrap = document.createElement("label");
+        wrap.className = "premium-search-wrap";
+        wrap.innerHTML = '<span class="search-icon" aria-hidden="true">⌕</span>' +
+            '<input id="recordSearch" type="search" autocomplete="off" ' +
+            'placeholder="Search incidents, years, locations or road impacts…" ' +
+            'aria-label="Search historical incident records">' +
+            '<span id="searchResultCount" aria-live="polite"></span>';
+        yearFilter.parentNode.insertBefore(wrap, yearFilter);
+
+        const count = wrap.querySelector("#searchResultCount");
+        const input = wrap.querySelector("#recordSearch");
+        const empty = document.createElement("div");
+        empty.className = "no-records";
+        empty.textContent = "No matching records. Try another keyword or select “All”.";
+        empty.hidden = true;
+        grid.appendChild(empty);
+
+        function applyFilters() {
+            const activeYear = document.querySelector(".year-btn.active");
+            const year = activeYear ? activeYear.dataset.year : "all";
+            const query = input.value.trim().toLowerCase();
+            let visible = 0;
+            cards.forEach(card => {
+                const yearMatch = year === "all" || card.dataset.recordYear === year;
+                const textMatch = !query || card.innerText.toLowerCase().includes(query);
+                const show = yearMatch && textMatch;
+                card.style.display = show ? "" : "none";
+                if (show) visible++;
+            });
+            empty.hidden = visible !== 0;
+            count.textContent = visible + (visible === 1 ? " result" : " results");
+        }
+        input.addEventListener("input", applyFilters);
+        document.querySelectorAll(".year-btn").forEach(button => {
+            button.addEventListener("click", () => requestAnimationFrame(applyFilters));
+        });
+        applyFilters();
+    }
+
+    // Keep the dramatic fracture effect user-triggered instead of repeatedly
+    // shaking the page during normal reading; the warning icon still triggers it.
+    if (typeof window.matchMedia === "function" &&
+        window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        document.body.classList.remove("disaster-mode");
+    }
+})();
+
+
+
+/* =========================================================
+   LIVE KWARAB WEATHER — Open-Meteo forecast API
+   Coordinates are approximate for the Kwarab area, not a
+   roadside sensor. This is not an official landslide alert.
+========================================================= */
+(function () {
+  const LAT = 29.65;
+  const LON = 79.65;
+  const endpoint = "https://api.open-meteo.com/v1/forecast";
+  const $ = (id) => document.getElementById(id);
+  const weatherStatus = $("weatherStatus");
+  const refreshButton = $("refreshWeather");
+  let busy = false;
+
+  function number(value, digits = 1) {
+    return Number.isFinite(value) ? value.toFixed(digits) : "--";
+  }
+  function describeCode(code, isDay = 1) {
+    if (code === 0) return { text: "Clear sky", icon: isDay ? "☀️" : "🌙" };
+    if ([1, 2].includes(code)) return { text: code === 1 ? "Mainly clear" : "Partly cloudy", icon: isDay ? "🌤️" : "☁️" };
+    if (code === 3) return { text: "Overcast", icon: "☁️" };
+    if ([45, 48].includes(code)) return { text: "Fog / reduced visibility", icon: "🌫️" };
+    if ([51, 53, 55, 56, 57].includes(code)) return { text: "Drizzle", icon: "🌦️" };
+    if ([61, 63, 65, 66, 67].includes(code)) return { text: "Rain", icon: "🌧️" };
+    if ([71, 73, 75, 77].includes(code)) return { text: "Snow / snow grains", icon: "🌨️" };
+    if ([80, 81, 82].includes(code)) return { text: "Rain showers", icon: "🌧️" };
+    if ([85, 86].includes(code)) return { text: "Snow showers", icon: "🌨️" };
+    if ([95, 96, 99].includes(code)) return { text: "Thunderstorm", icon: "⛈️" };
+    return { text: "Conditions unavailable", icon: "🌡️" };
+  }
+  function formatTime(value, options = { hour: "2-digit", minute: "2-digit" }) {
+    if (!value) return "--";
+    const date = new Date(value);
+    return Number.isNaN(date.getTime()) ? "--" : new Intl.DateTimeFormat("en-IN", { ...options, timeZone: "Asia/Kolkata" }).format(date);
+  }
+  function setText(id, value) {
+    const el = $(id);
+    if (el) el.textContent = value;
+  }
+  function setRisk(rain6, rain24, wind, code) {
+    const badge = $("weatherRiskBadge");
+    const title = $("weatherRiskTitle");
+    const text = $("weatherRiskText");
+    if (!badge || !title || !text) return;
+
+    badge.className = "weather-risk-badge neutral";
+    let level = "Routine weather watch";
+    let explanation = "No high rainfall signal in this forecast snapshot. Continue checking official advisories and local slope/road conditions.";
+    // Transparent weather-only heuristic, deliberately not labelled as a landslide prediction.
+    if (rain6 >= 30 || rain24 >= 60 || code === 95 || code === 96 || code === 99) {
+      level = "High weather concern";
+      badge.classList.add("high");
+      explanation = "Forecast indicates heavy precipitation and/or thunderstorm conditions. Avoid stopping near unstable slopes and check official road and weather advisories.";
+    } else if (rain6 >= 10 || rain24 >= 25 || wind >= 45) {
+      level = "Elevated weather watch";
+      badge.classList.add("caution");
+      explanation = "Rainfall or wind is elevated in this forecast snapshot. Stay alert for falling rocks, runoff and sudden road restrictions; follow official instructions.";
+    } else if (rain6 >= 2 || rain24 >= 10 || [45, 48, 61, 63, 65, 80, 81, 82].includes(code)) {
+      level = "Weather watch";
+      badge.classList.add("watch");
+      explanation = "Rain or reduced-visibility conditions may affect travel. This is a weather-only indicator, not confirmation of slope movement.";
+    }
+    title.textContent = level;
+    text.textContent = explanation;
+  }
+
+  async function loadWeather() {
+    if (busy) return;
+    busy = true;
+    if (refreshButton) {
+      refreshButton.disabled = true;
+      refreshButton.textContent = "↻ Updating…";
+    }
+    if (weatherStatus) weatherStatus.textContent = "Fetching latest forecast…";
+
+    const params = new URLSearchParams({
+      latitude: LAT,
+      longitude: LON,
+      timezone: "Asia/Kolkata",
+      forecast_days: "3",
+      current: "temperature_2m,relative_humidity_2m,apparent_temperature,is_day,precipitation,rain,showers,weather_code,wind_speed_10m,wind_gusts_10m",
+      hourly: "temperature_2m,relative_humidity_2m,precipitation_probability,precipitation,rain,showers,weather_code,wind_speed_10m",
+      daily: "weather_code,temperature_2m_max,temperature_2m_min,precipitation_sum,precipitation_probability_max,wind_speed_10m_max",
+      wind_speed_unit: "kmh",
+      precipitation_unit: "mm",
+      temperature_unit: "celsius"
+    });
+
+    try {
+      const response = await fetch(`${endpoint}?${params.toString()}`, { cache: "no-store" });
+      if (!response.ok) throw new Error(`Weather service returned ${response.status}`);
+      const data = await response.json();
+      if (!data.current || !data.hourly) throw new Error("Weather response was incomplete");
+
+      const current = data.current;
+      const code = current.weather_code;
+      const description = describeCode(code, current.is_day);
+      setText("currentTemp", number(current.temperature_2m, 1));
+      setText("feelsLike", `${number(current.apparent_temperature, 1)}°C`);
+      setText("weatherDescription", description.text);
+      setText("weatherIcon", description.icon);
+      setText("currentRain", number(current.rain ?? current.precipitation, 1));
+      setText("currentHumidity", number(current.relative_humidity_2m, 0));
+      setText("currentWind", number(current.wind_speed_10m, 0));
+      setText("currentGust", number(current.wind_gusts_10m, 0));
+      setText("weatherUpdated", `${formatTime(current.time)} IST`);
+      setText("weatherDataTime", `Model timestamp: ${current.time || "not supplied"} · India Standard Time`);
+
+      const hourly = data.hourly;
+      const now = new Date(current.time).getTime();
+      let start = hourly.time.findIndex(t => new Date(t).getTime() >= now);
+      if (start < 0) start = 0;
+      const sixRain = hourly.precipitation.slice(start, start + 6).reduce((sum, v) => sum + (Number(v) || 0), 0);
+      const next24Rain = hourly.precipitation.slice(start, start + 24).reduce((sum, v) => sum + (Number(v) || 0), 0);
+      const next6Wind = Math.max(0, ...hourly.wind_speed_10m.slice(start, start + 6).map(v => Number(v) || 0));
+      setText("nextSixRain", number(sixRain, 1));
+      setText("nextDayRain", `${number(next24Rain, 1)} mm`);
+      const rainPercent = Math.max(0, Math.min(100, (sixRain / 30) * 100));
+      if ($("rainProgress")) $("rainProgress").style.width = `${rainPercent}%`;
+      setText("rainSummary", sixRain >= 30
+        ? "Heavy precipitation is indicated in the next six hourly forecast periods. Check official advisories before travelling."
+        : sixRain >= 10
+          ? "Meaningful rainfall is forecast in the next six hours. Use caution on exposed mountain roads."
+          : sixRain >= 2
+            ? "Some precipitation is forecast. Keep checking conditions, especially if rain persists."
+            : "Little precipitation is forecast for the next six hours in this model snapshot; local conditions may differ.");
+
+      const daily = data.daily || {};
+      setText("dailyRange", `${number(daily.temperature_2m_max?.[0], 0)} / ${number(daily.temperature_2m_min?.[0], 0)} °C`);
+      setRisk(sixRain, next24Rain, Math.max(Number(current.wind_speed_10m) || 0, next6Wind), code);
+
+      const forecast = $("hourlyForecast");
+      if (forecast) {
+        forecast.innerHTML = "";
+        for (let i = start; i < Math.min(start + 6, hourly.time.length); i++) {
+          const condition = describeCode(hourly.weather_code[i], 1);
+          const card = document.createElement("div");
+          card.className = "hour-card";
+          const time = document.createElement("time");
+          time.textContent = formatTime(hourly.time[i]);
+          const icon = document.createElement("div");
+          icon.className = "hour-icon";
+          icon.textContent = condition.icon;
+          const temp = document.createElement("strong");
+          temp.textContent = `${number(hourly.temperature_2m[i], 0)}°`;
+          const rain = document.createElement("div");
+          rain.className = "hour-rain";
+          rain.textContent = `💧 ${number(hourly.precipitation[i], 1)} mm`;
+          const wind = document.createElement("div");
+          wind.className = "hour-wind";
+          wind.textContent = `Wind ${number(hourly.wind_speed_10m[i], 0)} km/h`;
+          card.append(time, icon, temp, rain, wind);
+          forecast.appendChild(card);
+        }
+      }
+      if (weatherStatus) weatherStatus.textContent = "Live forecast connected";
+    } catch (error) {
+      console.error("SafeHill weather error:", error);
+      if (weatherStatus) {
+        weatherStatus.textContent = "Weather service unavailable";
+        weatherStatus.style.color = "#fca5a5";
+      }
+      setText("weatherDescription", "Unable to load live data");
+      setText("weatherRiskTitle", "Data unavailable");
+      setText("weatherRiskText", "The live weather service could not be reached. Check your internet connection and retry. No risk status can be inferred without data.");
+      if ($("weatherRiskBadge")) $("weatherRiskBadge").className = "weather-risk-badge neutral";
+      const forecast = $("hourlyForecast");
+      if (forecast) forecast.innerHTML = '<div class="hourly-loading">Could not load forecast. Check your connection and press “Refresh weather”.</div>';
+    } finally {
+      busy = false;
+      if (refreshButton) {
+        refreshButton.disabled = false;
+        refreshButton.textContent = "↻ Refresh weather";
+      }
+    }
+  }
+
+  if (refreshButton) refreshButton.addEventListener("click", loadWeather);
+  loadWeather();
+  // Refresh periodically; users can always refresh manually.
+  window.setInterval(loadWeather, 10 * 60 * 1000);
 })();
 
 </script>

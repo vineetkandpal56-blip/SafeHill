@@ -218,16 +218,17 @@
 
             <h3>Your Current Location</h3>
 
-            <p id="locationStatus">
-                Waiting for location permission...
+            <p id="locationStatus" aria-live="polite">
+                लोकेशन शुरू करने के लिए अनुमति दें।
             </p>
+            <p id="liveTrackingState" style="font-size:13px;color:#0f766e;" aria-live="polite">📍 लाइव लोकेशन: बंद</p>
 
             <button
                 type="button"
                 id="detectLocationBtn"
                 class="location-btn"
             >
-                📍 Detect My Location
+                📍 लाइव लोकेशन शुरू / अपडेट
             </button>
 
 
@@ -418,8 +419,8 @@
 
             <h3>Your Current Location</h3>
 
-            <p id="touristLocationStatus">
-                Waiting for location permission...
+            <p id="touristLocationStatus" aria-live="polite">
+                लोकेशन की अनुमति का इंतज़ार है...
             </p>
 
             <p id="currentCoordinates">
@@ -1264,6 +1265,305 @@
 
 <!-- SafeHill JavaScript -->
 <script src="safe.js"></script>
+<div id="disasterAwarenessPopup" role="dialog" aria-modal="true" aria-labelledby="safetyNoticeHeading"
+     style="
+     display:flex;
+     position:fixed;
+     inset:0;
+     z-index:999999;
+     background:rgba(0,0,0,0.75);
+     align-items:center;
+     justify-content:center;
+     padding:20px;
+     ">
+
+    <div style="
+        background:white;
+        max-width:500px;
+        width:100%;
+        padding:25px;
+        border-radius:20px;
+        text-align:center;
+        box-shadow:0 20px 60px rgba(0,0,0,.4);
+        ">
+
+        <div style="font-size:45px;">⚠️</div>
+
+        <h2 id="safetyNoticeHeading" style="color:#b91c1c;">
+            आपदा के समय सुरक्षा संदेश
+        </h2>
+
+        <p>
+            आपदा को हम रोक नहीं सकते, लेकिन सही समय पर
+            सही सुरक्षा उपाय अपनाकर उसके प्रभाव और नुकसान
+            को कम कर सकते हैं।
+        </p>
+
+        <p>
+            भारी बारिश, भूस्खलन या अचानक बाढ़ के संकेत मिलने पर सुरक्षित स्थान पर रहें।
+            <strong>अनावश्यक रूप से खतरे वाले क्षेत्र में न जाएँ।</strong>
+        </p>
+
+        <p>
+            सुरक्षित स्थान पर रहें और जोखिम वाले क्षेत्रों
+            से दूर रहें।
+        </p>
+
+        <div style="
+            background:#ecfeff;
+            padding:15px;
+            border-radius:10px;
+            margin:15px 0;
+            border-left:4px solid #0f766e;
+            ">
+            <strong>SafeHill का मुख्य उद्देश्य:</strong><br><br>
+            आपदा को रोकना नहीं, बल्कि लोगों में जागरूकता
+            बढ़ाना और सही Safety Measures अपनाने में मदद करना है।
+        </div>
+
+        <p style="font-size:14px;color:#64748b;">
+            स्थानीय प्रशासन, SDRF और आधिकारिक चेतावनियों का पालन करें। यह वेबसाइट जागरूकता के लिए है,
+            आधिकारिक आपदा चेतावनी सेवा नहीं। लाइव लोकेशन केवल आपकी अनुमति से इस ब्राउज़र में उपयोग होगी।
+        </p>
+
+        <button id="safetyNoticeOk" type="button"
+                style="
+                width:100%;
+                padding:13px;
+                border:0;
+                border-radius:10px;
+                background:#0f766e;
+                color:white;
+                font-size:16px;
+                cursor:pointer;
+                ">
+            ✓ समझ गया
+        </button>
+
+    </div>
+</div>
+
+<style>
+  #disasterAwarenessPopup {
+    z-index: 1000000 !important;
+    backdrop-filter: blur(7px);
+  }
+  #disasterAwarenessPopup > div {
+    max-height: min(90vh, 760px);
+    overflow-y: auto;
+    border: 1px solid #dbeafe;
+  }
+  #safetyNoticeOk {
+    min-height: 48px;
+    font-weight: 800;
+  }
+  #liveTrackingState { overflow-wrap: anywhere; }
+</style>
+<script>
+(function () {
+  "use strict";
+
+  const notice = document.getElementById("disasterAwarenessPopup");
+  const okButton = document.getElementById("safetyNoticeOk");
+  const detectButton = document.getElementById("detectLocationBtn");
+  const trackingState = document.getElementById("liveTrackingState");
+  let watchId = null;
+  let latestCoords = null;
+  let weatherTimer = null;
+  let lastWeatherFetch = 0;
+
+  function setText(id, value) {
+    const el = document.getElementById(id);
+    if (el) el.textContent = value;
+  }
+
+  function setTrackingStatus(message) {
+    setText("locationStatus", message);
+    setText("touristLocationStatus", message);
+    if (trackingState) trackingState.textContent = message;
+  }
+
+  function closeNoticeAndStart() {
+    if (notice) notice.style.display = "none";
+    document.body.style.overflow = "";
+    startLiveTracking();
+  }
+
+  if (notice) document.body.style.overflow = "hidden";
+  if (okButton) {
+    okButton.addEventListener("click", closeNoticeAndStart);
+    okButton.focus();
+  }
+
+  function updateCoords(position) {
+    const c = position.coords;
+    latestCoords = { latitude: c.latitude, longitude: c.longitude, accuracy: c.accuracy };
+    const lat = c.latitude.toFixed(5);
+    const lon = c.longitude.toFixed(5);
+    const accuracy = Math.round(c.accuracy || 0);
+
+    setText("userLatitude", lat);
+    setText("userLongitude", lon);
+    setText("nearestLocation", "आपकी GPS लोकेशन (सटीकता लगभग " + accuracy + " मीटर)");
+    setText("currentCoordinates", "अक्षांश: " + lat + " | देशांतर: " + lon);
+    setText("locationStatus", "✅ लाइव लोकेशन अपडेट हो रही है");
+    setText("touristLocationStatus", "✅ GPS लोकेशन अपडेट हो रही है");
+    setText("liveTrackingState", "🟢 लाइव लोकेशन चालू • सटीकता लगभग " + accuracy + " मीटर");
+
+    const result = document.getElementById("locationResult");
+    if (result) result.style.display = "block";
+    const error = document.getElementById("locationError");
+    if (error) error.style.display = "none";
+
+    updateMapMarker(lat, lon);
+    // Open-Meteo is a keyless weather API; requests use the user's current GPS coordinates.
+    if (Date.now() - lastWeatherFetch > 60000) {
+      lastWeatherFetch = Date.now();
+      fetchWeather(lat, lon);
+    }
+  }
+
+  function updateMapMarker(lat, lon) {
+    if (!window.L || !window.map || typeof window.map.setView !== "function") return;
+    try {
+      if (!window.safeHillUserMarker) {
+        window.safeHillUserMarker = window.L.marker([Number(lat), Number(lon)]).addTo(window.map)
+          .bindPopup("📍 आपकी वर्तमान लोकेशन");
+      } else {
+        window.safeHillUserMarker.setLatLng([Number(lat), Number(lon)]);
+      }
+    } catch (e) {
+      // The main map may be initialized by safe.js in a private scope.
+    }
+  }
+
+  async function fetchWeather(lat, lon) {
+    const url = "https://api.open-meteo.com/v1/forecast?latitude=" +
+      encodeURIComponent(lat) + "&longitude=" + encodeURIComponent(lon) +
+      "&current=temperature_2m,relative_humidity_2m,precipitation,wind_speed_10m,wind_gusts_10m" +
+      "&hourly=precipitation_probability&forecast_days=1&timezone=auto";
+    try {
+      const response = await fetch(url);
+      if (!response.ok) throw new Error("Weather service returned " + response.status);
+      const data = await response.json();
+      const current = data.current || {};
+      const hourly = data.hourly || {};
+      const now = current.time ? Date.parse(current.time) : Date.now();
+      let rainProbability = "--";
+      if (Array.isArray(hourly.time) && Array.isArray(hourly.precipitation_probability)) {
+        let bestIndex = 0;
+        let bestDelta = Infinity;
+        hourly.time.forEach((t, i) => {
+          const delta = Math.abs(Date.parse(t) - now);
+          if (delta < bestDelta) { bestDelta = delta; bestIndex = i; }
+        });
+        if (hourly.precipitation_probability[bestIndex] != null) {
+          rainProbability = hourly.precipitation_probability[bestIndex] + "%";
+        }
+      }
+
+      const temp = current.temperature_2m;
+      const rain = current.precipitation;
+      const wind = current.wind_speed_10m;
+      const humidity = current.relative_humidity_2m;
+      const gust = current.wind_gusts_10m;
+
+      setText("temperature", temp == null ? "--" : temp + " °C");
+      setText("dashboardTemp", temp == null ? "--" : temp + " °C");
+      setText("rainfall", rain == null ? "--" : rain + " mm");
+      setText("dashboardRain", rain == null ? "--" : rain + " mm");
+      setText("wind", wind == null ? "--" : wind + " km/h");
+      setText("dashboardWind", wind == null ? "--" : wind + " km/h");
+      setText("humidity", humidity == null ? "--" : humidity + "%");
+      setText("rainProbability", rainProbability);
+      setText("windGusts", gust == null ? "--" : gust + " km/h");
+      setText("lastUpdated", new Date().toLocaleTimeString("hi-IN"));
+      setText("weatherStatus", "आपकी वर्तमान GPS लोकेशन के अनुसार मौसम");
+      setText("weatherError", "");
+
+      let level = "🟢 LOW";
+      let message = "मौसम के उपलब्ध आँकड़ों के अनुसार सामान्य सतर्कता रखें।";
+      if ((rain != null && rain >= 10) || (wind != null && wind >= 50)) {
+        level = "🔴 HIGH AWARENESS";
+        message = "तेज़ बारिश/हवा दर्ज हुई है। ढलानों और नदी-नालों से दूर रहें तथा आधिकारिक निर्देश देखें।";
+      } else if ((rain != null && rain >= 2) || (wind != null && wind >= 30) ||
+                 (rainProbability !== "--" && Number.parseInt(rainProbability, 10) >= 60)) {
+        level = "🟡 MEDIUM AWARENESS";
+        message = "मौसम बदल सकता है। यात्रा से पहले सड़क और प्रशासन की ताज़ा जानकारी जाँचें।";
+      }
+      setText("dashboardRisk", level);
+      setText("risk-level", "वर्तमान मौसम-आधारित जागरूकता: " + level);
+      setText("alert-message", message);
+      setText("touristAlertMessage", message);
+      setText("safetyGuidance", "मौसम संकेत केवल जागरूकता के लिए हैं; यह आधिकारिक भूस्खलन पूर्वानुमान नहीं है।");
+    } catch (error) {
+      setText("weatherStatus", "मौसम डेटा अभी उपलब्ध नहीं है");
+      setText("weatherError", "Open-Meteo मौसम सेवा से कनेक्शन नहीं हो पाया। इंटरनेट जाँचकर Refresh करें।");
+    }
+  }
+
+  function handleLocationError(error) {
+    let message = "लोकेशन नहीं मिल पाई।";
+    if (error && error.code === 1) message = "लोकेशन अनुमति नहीं मिली। ब्राउज़र सेटिंग्स में Location Allow करें।";
+    else if (error && error.code === 2) message = "डिवाइस की लोकेशन उपलब्ध नहीं है। GPS/Location चालू करें।";
+    else if (error && error.code === 3) message = "लोकेशन मिलने में समय लगा। दोबारा कोशिश करें।";
+    setTrackingStatus("⚠️ " + message);
+    const err = document.getElementById("locationError");
+    if (err) { err.textContent = message; err.style.display = "block"; }
+  }
+
+  function startLiveTracking() {
+    if (!navigator.geolocation) {
+      setTrackingStatus("इस ब्राउज़र में GPS लोकेशन सुविधा उपलब्ध नहीं है।");
+      return;
+    }
+    if (watchId !== null) navigator.geolocation.clearWatch(watchId);
+    setTrackingStatus("📍 आपकी अनुमति के बाद GPS लोकेशन खोजी जा रही है...");
+    watchId = navigator.geolocation.watchPosition(updateCoords, handleLocationError, {
+      enableHighAccuracy: true,
+      maximumAge: 5000,
+      timeout: 20000
+    });
+    if (detectButton) detectButton.textContent = "⏹ लाइव लोकेशन बंद करें";
+  }
+
+  if (detectButton) {
+    detectButton.addEventListener("click", function () {
+      if (watchId === null) {
+        startLiveTracking();
+      } else {
+        navigator.geolocation.clearWatch(watchId);
+        watchId = null;
+        setTrackingStatus("📍 लाइव लोकेशन बंद है। शुरू करने के लिए बटन दबाएँ।");
+        detectButton.textContent = "📍 लाइव लोकेशन शुरू / अपडेट";
+      }
+    });
+  }
+
+  const refresh = document.getElementById("refreshWeather");
+  if (refresh) refresh.addEventListener("click", function () {
+    if (latestCoords) {
+      lastWeatherFetch = Date.now();
+      fetchWeather(latestCoords.latitude, latestCoords.longitude);
+    } else {
+      setText("weatherError", "पहले लाइव लोकेशन की अनुमति दें, फिर मौसम Refresh करें।");
+    }
+  });
+
+  // Recheck weather periodically while GPS tracking remains active.
+  weatherTimer = window.setInterval(function () {
+    if (watchId !== null && latestCoords) {
+      lastWeatherFetch = Date.now();
+      fetchWeather(latestCoords.latitude, latestCoords.longitude);
+    }
+  }, 10 * 60 * 1000);
+
+  window.addEventListener("beforeunload", function () {
+    if (watchId !== null) navigator.geolocation.clearWatch(watchId);
+    if (weatherTimer !== null) clearInterval(weatherTimer);
+  });
+})();
+</script>
 
 </body>
 </html>
