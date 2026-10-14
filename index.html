@@ -62,8 +62,52 @@ button { color: #ffffff; }
 @media (prefers-contrast: more) {
   body, .section, .section p, .dashboard-card, .weather-card { color: #ffffff !important; }
 }
+
+#safehillAlarmPanel .sh-alarm-heading { position:relative; padding-right:38px; }
+#safehillAlarmPanel #shCloseAlarmPanel {
+  position:absolute; right:0; top:-5px; width:32px; min-height:32px;
+  padding:0; border-radius:9px; background:#7f1d1d; border:1px solid #fca5a5;
+  color:#fff !important; font-size:24px; line-height:1; font-weight:800;
+}
+#safehillAlarmPanel #shCloseAlarmPanel:hover { background:#991b1b; }
+#safehillAlarmPanel.sh-user-closed { display:none !important; }
+
 </style>
 
+
+<style id="safehill-social-styles">
+.social-wrap{max-width:1160px;margin:0 auto;padding:24px}.social-grid{display:grid;grid-template-columns:minmax(280px,.85fr) minmax(0,1.4fr);gap:22px;align-items:start}.social-panel{background:var(--card-bg,#fff);border:1px solid rgba(100,116,139,.24);border-radius:20px;padding:22px;box-shadow:0 12px 34px rgba(15,23,42,.08);color:var(--text-color,#172033)}.social-panel h3{margin:0 0 8px}.social-muted{opacity:.78;font-size:.93rem;line-height:1.5}.social-form{display:grid;gap:12px;margin-top:16px}.social-form label{font-weight:650;font-size:.92rem;display:grid;gap:6px}.social-form input,.social-form select,.social-form textarea{width:100%;box-sizing:border-box;padding:11px 12px;border:1px solid #cbd5e1;border-radius:10px;background:#fff;color:#172033;font:inherit}.social-form textarea{min-height:95px;resize:vertical}.social-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:12px}.social-btn{border:0;border-radius:10px;padding:11px 15px;font-weight:700;cursor:pointer;background:#0f766e;color:#fff}.social-btn.secondary{background:#334155}.social-btn:disabled{opacity:.55;cursor:not-allowed}.social-notice{padding:11px 13px;border-radius:10px;background:#eff6ff;color:#1e40af;margin-top:12px;font-size:.9rem}.social-feed{display:grid;gap:14px;margin-top:15px}.social-post{border:1px solid rgba(100,116,139,.25);border-radius:16px;overflow:hidden;background:var(--card-bg,#fff);color:var(--text-color,#172033)}.social-post img,.social-post video{display:block;width:100%;max-height:350px;object-fit:cover;background:#0f172a}.social-post-body{padding:15px}.social-post-top{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}.social-tag{font-size:.78rem;font-weight:750;padding:5px 9px;border-radius:999px;background:#fef3c7;color:#92400e}.social-tag.approved{background:#dcfce7;color:#166534}.social-tag.pending{background:#ffedd5;color:#9a3412}.social-meta{font-size:.83rem;opacity:.78;margin:8px 0}.social-empty{padding:25px;text-align:center;border:1px dashed #94a3b8;border-radius:14px;opacity:.8}.social-admin{margin-top:18px}.social-hidden{display:none!important}.social-preview{width:100%;max-height:180px;object-fit:contain;border-radius:10px;background:#e2e8f0}.social-feed-title{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}.social-small{font-size:.82rem;opacity:.8}.social-post-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.social-post-actions button{font-size:.84rem;padding:8px 10px}
+@media(max-width:800px){.social-grid{grid-template-columns:1fr}.social-wrap{padding:14px}.social-panel{padding:16px}}
+</style>
+
+<style id="safehill-social-contrast-fix">
+/* Social Connect contrast fix: scoped rules beat legacy global form styles */
+#social-connect .social-panel,
+#social-connect .social-post,
+#social-connect .social-panel h3,
+#social-connect .social-post strong,
+#social-connect .social-post-body p { color:#172033 !important; }
+#social-connect .social-muted,
+#social-connect .social-small,
+#social-connect .social-meta { color:#475569 !important; }
+#social-connect .social-form label { color:#172033 !important; }
+#social-connect .social-form input,
+#social-connect .social-form select,
+#social-connect .social-form textarea {
+  background:#ffffff !important; color:#172033 !important;
+  border:1px solid #94a3b8 !important; caret-color:#0f172a;
+}
+#social-connect .social-form input::placeholder,
+#social-connect .social-form textarea::placeholder { color:#64748b !important; opacity:1 !important; }
+#social-connect .social-form input[type="checkbox"] { accent-color:#0f766e; }
+#social-connect .social-notice { color:#1e3a8a !important; background:#eff6ff !important; }
+#social-connect .social-post a { color:#0369a1 !important; font-weight:700; }
+#social-connect .social-empty { color:#475569 !important; }
+#social-connect .social-btn { color:#fff !important; }
+#social-connect .social-tag { color:#92400e !important; }
+#social-connect .social-tag.approved { color:#166534 !important; }
+#social-connect .social-tag.pending { color:#9a3412 !important; }
+</style>
 </head>
 
 <body>
@@ -126,6 +170,7 @@ button { color: #ffffff; }
             <li><a href="#risk">Risk</a></li>
             <li><a href="#map-section">Map</a></li>
             <li><a href="#report">Report</a></li>
+            <li><a href="#social-connect">Social Connect</a></li>
             <li><a href="#contact">Emergency</a></li>
         </ul>
 
@@ -1068,6 +1113,55 @@ button { color: #ffffff; }
 </section>
 
 
+
+<!-- SAFEHILL SOCIAL INCIDENT CONNECT: user reports stay pending until approved -->
+<section id="social-connect" class="section">
+  <div class="section-heading">
+    <span>COMMUNITY REPORTING</span>
+    <h2>🤝 SafeHill Social Incident Connect</h2>
+    <p>आपदा की फोटो/वीडियो, घटना की तारीख और लोकेशन साझा करें। सार्वजनिक Feed में रिपोर्ट Admin की जाँच के बाद ही दिखेगी।</p>
+  </div>
+  <div class="social-wrap">
+    <div class="social-grid">
+      <div class="social-panel">
+        <h3>📤 नई घटना की रिपोर्ट</h3>
+        <p class="social-muted">भूस्खलन, सड़क बंद, बाढ़, दरार या दूसरी आपदा की रिपोर्ट भेजें। कृपया केवल वास्तविक और सुरक्षित रूप से ली गई सामग्री भेजें।</p>
+        <form id="shSocialForm" class="social-form">
+          <label>घटना का प्रकार
+            <select id="shIncidentType" required><option value="Landslide">भूस्खलन / Landslide</option><option value="Flood">बाढ़ / Flood</option><option value="Road Damage">सड़क क्षति</option><option value="Crack / Subsidence">दरार / जमीन धँसना</option><option value="Forest Fire">वनाग्नि</option><option value="Other">अन्य</option></select>
+          </label>
+          <label>घटना का शीर्षक<input id="shIncidentTitle" maxlength="100" required placeholder="जैसे: Kwarab के पास सड़क पर मलबा"></label>
+          <label>विवरण<textarea id="shIncidentDescription" maxlength="1200" required placeholder="क्या हुआ, कितना खतरा है, रास्ता खुला है या बंद?"></textarea></label>
+          <label>घटना की तारीख और समय<input id="shIncidentDate" type="datetime-local" required></label>
+          <label>स्थान<input id="shIncidentLocation" maxlength="180" required placeholder="जैसे: Kwarab, Almora"></label>
+          <label>फोटो या वीडियो (अधिकतम 10 MB)<input id="shIncidentMedia" type="file" accept="image/*,video/mp4,video/webm,video/quicktime"></label>
+          <img id="shSocialPreview" class="social-preview social-hidden" alt="चुनी गई मीडिया का प्रीव्यू">
+          <label style="display:flex;grid-template-columns:auto 1fr;align-items:start;gap:9px;font-weight:500"><input id="shIncidentConsent" type="checkbox" required style="width:auto;margin-top:4px"> मैं पुष्टि करता/करती हूँ कि यह रिपोर्ट सही है और इसमें किसी की निजी जानकारी अनावश्यक रूप से साझा नहीं की गई है।</label>
+          <button id="shSubmitIncident" class="social-btn" type="submit">रिपोर्ट Admin को भेजें</button>
+        </form>
+        <div id="shSocialNotice" class="social-notice" role="status">Firebase सेटअप के बाद रिपोर्ट ऑनलाइन भेजी जा सकती है। अभी Demo Mode में डेटा केवल इसी ब्राउज़र में रहेगा।</div>
+        <div class="social-actions"><button id="shUseGpsForIncident" class="social-btn secondary" type="button">📍 मेरी लोकेशन भरें</button><button id="shSocialRefresh" class="social-btn secondary" type="button">↻ Feed Refresh</button></div>
+        <p class="social-small">GPS केवल आपकी अनुमति से लिया जाएगा। यह समुदाय-आधारित रिपोर्टिंग सुविधा है, सरकारी आपदा चेतावनी सेवा नहीं। आपात स्थिति में 112 / स्थानीय प्रशासन से संपर्क करें।</p>
+      </div>
+      <div class="social-panel">
+        <div class="social-feed-title"><div><h3 style="margin-bottom:4px">🌍 Community Incident Feed</h3><div class="social-muted">सिर्फ स्वीकृत रिपोर्ट सार्वजनिक रूप से दिखाई जाती हैं।</div></div><span id="shSocialFeedCount" class="social-tag approved">0 रिपोर्ट</span></div>
+        <div id="shSocialFeed" class="social-feed"><div class="social-empty">अभी रिपोर्ट लोड हो रही हैं…</div></div>
+        <div class="social-panel social-admin">
+          <h3>🛡️ Admin Moderation</h3>
+          <p class="social-muted">Admin लॉगिन से लंबित रिपोर्ट देखो और Approve/Reject करो। पहले Firebase सेटअप और सुरक्षा नियम लागू करना जरूरी है।</p>
+          <form id="shAdminLoginForm" class="social-form">
+            <label>Admin Email<input id="shAdminEmail" type="email" autocomplete="username" required placeholder="admin@example.com"></label>
+            <label>Password<input id="shAdminPassword" type="password" autocomplete="current-password" required></label>
+            <div class="social-actions"><button class="social-btn secondary" type="submit">Admin Login</button><button id="shAdminLogout" class="social-btn secondary social-hidden" type="button">Logout</button></div>
+          </form>
+          <div id="shAdminNotice" class="social-notice">Admin panel लॉगिन के बाद खुलेगा।</div>
+          <div id="shPendingReports" class="social-feed"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- =====================================================
      GALLERY
 ===================================================== -->
@@ -1616,7 +1710,11 @@ button { color: #ffffff; }
 
 <!-- SafeHill live detector + automatic siren controls -->
 <div id="safehillAlarmPanel" role="region" aria-label="SafeHill लाइव अलर्ट और सायरन">
-  <div class="sh-alarm-heading"><span class="sh-pulse-dot"></span><strong>SafeHill Live Detector</strong></div>
+  <div class="sh-alarm-heading">
+    <span class="sh-pulse-dot"></span>
+    <strong>SafeHill Live Detector</strong>
+    <button id="shCloseAlarmPanel" type="button" aria-label="सायरन पैनल बंद करें" title="पैनल बंद करें">×</button>
+  </div>
   <p id="shAlarmStatus" aria-live="polite">अलर्ट सिस्टम तैयार है। अपने ब्राउज़र में ध्वनि की अनुमति चालू करें।</p>
   <div class="sh-alarm-actions">
     <button id="shArmAlarm" type="button">🔊 ऑटो सायरन चालू करें</button>
@@ -1642,6 +1740,7 @@ button { color: #ffffff; }
 #safehillAlarmPanel button { min-height:42px; padding:9px 10px; border:1px solid #64748b; border-radius:9px; background:#263449; color:#fff !important; font-size:12px; font-weight:700; cursor:pointer; }
 #safehillAlarmPanel #shArmAlarm { grid-column:1/-1; background:#b45309; border-color:#fbbf24; }
 #safehillAlarmPanel button:focus-visible { outline:3px solid #7dd3fc; outline-offset:2px; }
+#safehillAlarmPanel.sh-auto-hidden { display:none !important; }
 #safehillAlarmPanel.is-alerting { border-color:#ef4444; box-shadow:0 0 0 2px rgba(239,68,68,.25),0 12px 36px rgba(0,0,0,.4); }
 #safehillAlarmPanel.is-alerting .sh-pulse-dot { background:#ef4444; animation:shAlarmPulse 1s infinite; }
 @keyframes shAlarmPulse { 50% { opacity:.3; transform:scale(.8); } }
@@ -1659,6 +1758,15 @@ button { color: #ffffff; }
   const armBtn = document.getElementById("shArmAlarm");
   const testBtn = document.getElementById("shTestAlarm");
   const stopBtn = document.getElementById("shStopAlarm");
+
+  const closePanelBtn = document.getElementById("shCloseAlarmPanel");
+  if (closePanelBtn) {
+    closePanelBtn.addEventListener("click", function () {
+      panel.classList.add("sh-user-closed");
+      status("सायरन पैनल बंद है। अलर्ट सिस्टम अपनी सेटिंग के अनुसार चलता रहेगा। पैनल फिर खोलने के लिए पेज Refresh करें।");
+    });
+  }
+
 
   let audioContext = null;
   let armed = false;
@@ -1765,6 +1873,8 @@ button { color: #ffffff; }
       return;
     }
     const key = reasons.join("|");
+    panel.classList.remove("sh-auto-hidden", "sh-user-closed");
+    panel.classList.add("is-alerting");
     status("⚠️ " + reasons.join(" • "));
     if (armed && key !== currentAlertKey && !active && Date.now() - lastAlertAt > 30000) {
       currentAlertKey = key;
@@ -1781,10 +1891,15 @@ button { color: #ffffff; }
     armed = !armed;
     armBtn.textContent = armed ? "🟢 ऑटो सायरन चालू है" : "🔊 ऑटो सायरन चालू करें";
     if (armed) {
-      status("ऑटो सायरन सक्षम है। अब निर्धारित मौसम/GPS संकेत मिलने पर आवाज़ बजेगी।");
+      status("ऑटो सायरन सक्षम है। कंट्रोल पैनल स्क्रीन से हट गया है; अलर्ट मिलने पर फिर दिखाई देगा।");
+      // Hide the large panel after the browser audio permission has been granted.
+      window.setTimeout(() => {
+        if (armed && !active) panel.classList.add("sh-auto-hidden");
+      }, 1200);
       evaluateAlert();
     } else {
       stopSiren(true);
+      panel.classList.remove("sh-auto-hidden");
       status("ऑटो सायरन बंद है।");
     }
   });
@@ -1796,6 +1911,7 @@ button { color: #ffffff; }
     stopSiren(true);
     currentAlertKey = "";
     status(armed ? "अभी का अलार्म बंद किया गया। नया संकेत मिलने पर फिर बज सकता है।" : "सायरन बंद है।");
+    if (armed) window.setTimeout(() => panel.classList.add("sh-auto-hidden"), 2500);
   });
 
   // Observe the GPS values updated by the live-location feature.
@@ -1836,6 +1952,86 @@ button { color: #ffffff; }
   });
 
   status("अलर्ट सिस्टम तैयार है। पहले “ऑटो सायरन चालू करें” दबाएँ; फिर निर्धारित संकेत मिलने पर सायरन अपने-आप बजेगा।");
+})();
+</script>
+
+
+<!-- Firebase Social Connect integration. Add your project's Firebase web config below. -->
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-storage-compat.js"></script>
+<script id="safehill-social-script">
+(function(){
+ 'use strict';
+ // STEP 1: Replace the empty config values with your Firebase project's Web App config.
+ const FIREBASE_CONFIG = {
+   apiKey: "PASTE_API_KEY_HERE",
+   authDomain: "PASTE_PROJECT_ID_HERE.firebaseapp.com",
+   projectId: "PASTE_PROJECT_ID_HERE",
+   storageBucket: "PASTE_STORAGE_BUCKET_HERE",
+   messagingSenderId: "PASTE_MESSAGING_SENDER_ID_HERE",
+   appId: "PASTE_APP_ID_HERE"
+ };
+ // STEP 2: Put the exact administrator email here. Firestore rules must also enforce admin-only approval.
+ const ADMIN_EMAILS = ["REPLACE_WITH_YOUR_ADMIN_EMAIL"];
+ const DEMO_KEY='safehill_social_demo_v1';
+ const $=id=>document.getElementById(id);
+ const form=$('shSocialForm'), notice=$('shSocialNotice'), feed=$('shSocialFeed'), count=$('shSocialFeedCount');
+ if(!form||!feed) return;
+ let app=null, auth=null, db=null, storage=null, demo=true, currentAdmin=null, previewUrl=null;
+ const isConfigured=()=>FIREBASE_CONFIG.apiKey && !FIREBASE_CONFIG.apiKey.includes('PASTE_') && FIREBASE_CONFIG.projectId && !FIREBASE_CONFIG.projectId.includes('PASTE_') && FIREBASE_CONFIG.appId && !FIREBASE_CONFIG.appId.includes('PASTE_');
+ function setNotice(t){notice.textContent=t;}
+ function escapeHtml(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+ function dateLabel(v){try{return new Date(v).toLocaleString('hi-IN',{dateStyle:'medium',timeStyle:'short'});}catch(e){return v||'तारीख उपलब्ध नहीं';}}
+ function demoPosts(){try{return JSON.parse(localStorage.getItem(DEMO_KEY)||'[]');}catch(e){return [];}}
+ function saveDemo(a){localStorage.setItem(DEMO_KEY,JSON.stringify(a));}
+ function renderCard(p,admin=false){
+   const media=p.mediaUrl?(p.mediaType&&p.mediaType.startsWith('video/')?`<video controls preload="metadata" src="${escapeHtml(p.mediaUrl)}"></video>`:`<img loading="lazy" src="${escapeHtml(p.mediaUrl)}" alt="घटना की फोटो">`):'';
+   const state=p.status==='approved'?'<span class="social-tag approved">स्वीकृत</span>':p.status==='rejected'?'<span class="social-tag">रिजेक्टेड</span>':'<span class="social-tag pending">जाँच बाकी</span>';
+   return `<article class="social-post">${media}<div class="social-post-body"><div class="social-post-top"><strong>${escapeHtml(p.title)}</strong>${admin?state:''}</div><div class="social-meta">📌 ${escapeHtml(p.location)} · 📅 ${escapeHtml(dateLabel(p.incidentDate))}<br>श्रेणी: ${escapeHtml(p.type)} · रिपोर्ट: ${escapeHtml(dateLabel(p.createdAt))}</div><p>${escapeHtml(p.description)}</p>${p.lat!=null&&p.lng!=null?`<a target="_blank" rel="noopener" href="https://www.google.com/maps?q=${encodeURIComponent(p.lat+','+p.lng)}">📍 मैप पर देखें</a>`:''}${admin?`<div class="social-post-actions"><button class="social-btn" data-review="approved" data-id="${escapeHtml(p.id)}">Approve</button><button class="social-btn secondary" data-review="rejected" data-id="${escapeHtml(p.id)}">Reject</button></div>`:''}</div></article>`;
+ }
+ async function renderFeed(){
+   try{
+    let posts;
+    if(demo){posts=demoPosts().filter(p=>p.status==='approved').sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt));}
+    else {const snap=await db.collection('incidents').where('status','==','approved').orderBy('createdAt','desc').limit(50).get();posts=snap.docs.map(d=>({id:d.id,...d.data()}));}
+    feed.innerHTML=posts.length?posts.map(p=>renderCard(p)).join(''):'<div class="social-empty">अभी कोई स्वीकृत रिपोर्ट नहीं है। पहली रिपोर्ट भेजें।</div>';
+    count.textContent=posts.length+' रिपोर्ट';
+   }catch(e){feed.innerHTML='<div class="social-empty">Feed लोड नहीं हुआ। Firebase सेटअप और Firestore index/rules जाँचें।</div>';}
+ }
+ async function renderPending(){
+  const box=$('shPendingReports'); if(!currentAdmin){box.innerHTML='';return;}
+  try{
+   let posts;
+   if(demo){posts=demoPosts().filter(p=>p.status==='pending');}
+   else {const snap=await db.collection('incidents').where('status','==','pending').orderBy('createdAt','desc').limit(50).get();posts=snap.docs.map(d=>({id:d.id,...d.data()}));}
+   box.innerHTML=posts.length?posts.map(p=>renderCard(p,true)).join(''):'<div class="social-empty">कोई लंबित रिपोर्ट नहीं है।</div>';
+  }catch(e){box.textContent='लंबित रिपोर्ट नहीं पढ़ सके। Firebase Rules/permissions जाँचें।';}
+ }
+ function setAdminUI(){ $('shAdminLogout').classList.toggle('social-hidden',!currentAdmin); $('shAdminNotice').textContent=currentAdmin?'Admin login सफल: लंबित रिपोर्ट की समीक्षा कर सकते हैं।':'Admin panel लॉगिन के बाद खुलेगा।'; }
+ if(isConfigured() && window.firebase){
+   try{app=firebase.apps.length?firebase.app():firebase.initializeApp(FIREBASE_CONFIG);auth=firebase.auth();db=firebase.firestore();storage=firebase.storage();demo=false;
+    auth.signInAnonymously().catch(e=>console.warn('Anonymous auth setup required:',e));
+    auth.onAuthStateChanged(u=>{if(u && !u.isAnonymous){currentAdmin=ADMIN_EMAILS.includes((u.email||'').toLowerCase())?u:null;}else currentAdmin=null;setAdminUI();renderPending();});
+    setNotice('Firebase जुड़ा है। आपकी रिपोर्ट पहले Admin review में जाएगी।');
+   }catch(e){demo=true;setNotice('Firebase शुरू नहीं हो पाया। Config जाँचें। अभी केवल इस डिवाइस का Demo Mode चल रहा है।');}
+ }else{setNotice('Demo Mode: अभी रिपोर्ट केवल इसी ब्राउज़र में सेव होंगी। सभी लोगों तक रिपोर्ट पहुँचाने के लिए Firebase Web Config और Security Rules जोड़ने होंगे।');}
+ $('shIncidentDate').value=new Date(Date.now()-new Date().getTimezoneOffset()*60000).toISOString().slice(0,16);
+ $('shIncidentMedia').addEventListener('change',()=>{const f=$('shIncidentMedia').files[0],img=$('shSocialPreview');if(previewUrl)URL.revokeObjectURL(previewUrl);previewUrl=null;if(!f){img.classList.add('social-hidden');return;}if(f.size>10*1024*1024){setNotice('फाइल 10 MB से बड़ी है। छोटी फाइल चुनें।');$('shIncidentMedia').value='';img.classList.add('social-hidden');return;}if(f.type.startsWith('image/')){previewUrl=URL.createObjectURL(f);img.src=previewUrl;img.classList.remove('social-hidden');}else img.classList.add('social-hidden');});
+ $('shUseGpsForIncident').addEventListener('click',()=>{if(!navigator.geolocation){setNotice('इस ब्राउज़र में GPS उपलब्ध नहीं है।');return;}setNotice('GPS लोकेशन प्राप्त की जा रही है…');navigator.geolocation.getCurrentPosition(pos=>{const {latitude:lat,longitude:lng}=pos.coords;$('shIncidentLocation').value=`GPS: ${lat.toFixed(5)}, ${lng.toFixed(5)}`;$('shIncidentLocation').dataset.lat=lat;$('shIncidentLocation').dataset.lng=lng;setNotice('GPS लोकेशन भर दी गई। चाहें तो स्थान का नाम भी जोड़ें।');},e=>setNotice('GPS नहीं मिला: '+e.message),{enableHighAccuracy:true,timeout:12000});});
+ form.addEventListener('submit',async e=>{e.preventDefault();const file=$('shIncidentMedia').files[0];if(file&&file.size>10*1024*1024){setNotice('फाइल 10 MB से बड़ी है।');return;}const btn=$('shSubmitIncident');btn.disabled=true;btn.textContent='रिपोर्ट भेजी जा रही है…';try{
+   const loc=$('shIncidentLocation').value.trim();const item={type:$('shIncidentType').value,title:$('shIncidentTitle').value.trim(),description:$('shIncidentDescription').value.trim(),incidentDate:new Date($('shIncidentDate').value).toISOString(),location:loc,lat:$('shIncidentLocation').dataset.lat?Number($('shIncidentLocation').dataset.lat):null,lng:$('shIncidentLocation').dataset.lng?Number($('shIncidentLocation').dataset.lng):null,status:'pending',createdAt:new Date().toISOString(),mediaUrl:'',mediaType:file?file.type:'',reporterUid:auth&&auth.currentUser?auth.currentUser.uid:'demo-user'};
+   if(demo){if(file)item.mediaUrl=URL.createObjectURL(file);item.id='demo_'+Date.now();const all=demoPosts();all.unshift(item);saveDemo(all);setNotice('Demo रिपोर्ट सेव हुई है। यह केवल इसी डिवाइस पर है, सार्वजनिक वेबसाइट पर नहीं। Firebase जोड़ने के बाद ही सभी यूजर रिपोर्ट देख पाएँगे।');}
+   else {if(!auth.currentUser) await auth.signInAnonymously();item.reporterUid=auth.currentUser.uid;if(file){const ref=storage.ref('incident-media/'+auth.currentUser.uid+'/'+Date.now()+'_'+file.name.replace(/[^a-zA-Z0-9._-]/g,'_'));const snap=await ref.put(file);item.mediaUrl=await snap.ref.getDownloadURL();}const data={...item,createdAt:firebase.firestore.FieldValue.serverTimestamp()};delete data.id;await db.collection('incidents').add(data);setNotice('रिपोर्ट सफलतापूर्वक भेज दी गई। Admin के अप्रूव करने के बाद Feed में दिखेगी।');}
+   form.reset();$('shIncidentDate').value=new Date(Date.now()-new Date().getTimezoneOffset()*60000).toISOString().slice(0,16);$('shSocialPreview').classList.add('social-hidden');renderFeed();renderPending();
+  }catch(err){console.error(err);setNotice('रिपोर्ट नहीं भेजी गई: '+(err.message||'Firebase configuration/permission जाँचें।'));}finally{btn.disabled=false;btn.textContent='रिपोर्ट Admin को भेजें';}
+ });
+ $('shAdminLoginForm').addEventListener('submit',async e=>{e.preventDefault();const email=$('shAdminEmail').value.trim().toLowerCase(),password=$('shAdminPassword').value;if(demo){setNotice('Admin Login के लिए पहले Firebase config और Authentication में Email/Password enable करें। Demo Mode में सुरक्षित admin approval उपलब्ध नहीं है।');return;}if(!ADMIN_EMAILS.includes(email)){ $('shAdminNotice').textContent='यह email Admin सूची में नहीं है। HTML config में ADMIN_EMAILS अपडेट करें।';return;}try{await auth.signInWithEmailAndPassword(email,password);currentAdmin=auth.currentUser;setAdminUI();await renderPending();}catch(err){$('shAdminNotice').textContent='Login नहीं हुआ: '+err.message;}});
+ $('shAdminLogout').addEventListener('click',async()=>{if(auth)await auth.signOut();currentAdmin=null;setAdminUI();renderPending();});
+ $('shPendingReports').addEventListener('click',async e=>{const b=e.target.closest('button[data-review]');if(!b)return;if(!currentAdmin||!ADMIN_EMAILS.includes((currentAdmin.email||'').toLowerCase())){alert('Admin login आवश्यक है।');return;}const id=b.dataset.id,status=b.dataset.review;try{if(demo){const a=demoPosts().map(p=>p.id===id?{...p,status}:p);saveDemo(a);}else{await db.collection('incidents').doc(id).update({status,reviewedAt:firebase.firestore.FieldValue.serverTimestamp(),reviewedBy:currentAdmin.email});}await renderPending();await renderFeed();}catch(err){alert('स्थिति अपडेट नहीं हुई: '+err.message);}});
+ $('shSocialRefresh').addEventListener('click',()=>{renderFeed();renderPending();});
+ renderFeed();
 })();
 </script>
 
